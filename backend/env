@@ -1,0 +1,11 @@
+PORT=3001
+NODE_ENV=development
+DATABASE_URL=postgresql://postgres:KSA2024Kingsley!@db.cqbzvshrynldskbvzxsk.supabase.co:5432/postgres
+JWT_SECRET=ksa_secret_key_kingsley_2024_minimum_32_chars
+JWT_EXPIRES_IN=7d
+OPENROUTER_API_KEY=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
+MAX_FILE_SIZE_MB=50
+UPLOAD_DIR=./uploads
+ALLOWED_ORIGINS=http://localhost:3000,https://kinsgley-school-manager-3fb07rjjg-inge-1-b.vercel.app
+ADMIN_EMAIL=admin@kingsley.edu
+ADMIN_PASSWORD=AdminKSA2025!
