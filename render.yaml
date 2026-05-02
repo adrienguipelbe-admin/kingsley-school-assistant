@@ -3,7 +3,6 @@ services:
     name: ksa-backend
     env: node
     region: frankfurt
-    plan: starter
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
@@ -28,7 +27,6 @@ services:
   - type: web
     name: ksa-frontend
     env: static
-    plan: starter
     rootDir: frontend
     buildCommand: echo "No build needed"
     staticPublishPath: .
