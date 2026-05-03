@@ -3,1942 +3,1311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KSA — Kingsley School Assistant</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>ING1B Mag — Institut Saint Jean Ingénieur</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-:root {
-  --white: #ffffff;
-  --bg: #f4f6ff;
-  --bg2: #eef1ff;
-  --surface: #ffffff;
-  --surface2: #f8f9ff;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.14);
-  --text: #1a1d2e;
-  --text2: #4a4f6a;
-  --text3: #8a8fa8;
-  --blue: #3b82f6;
-  --blue-l: #eff6ff;
-  --blue-m: #bfdbfe;
-  --red: #ef4444;
-  --red-l: #fef2f2;
-  --red-m: #fecaca;
-  --yellow: #f59e0b;
-  --yellow-l: #fffbeb;
-  --yellow-m: #fde68a;
-  --green: #10b981;
-  --green-l: #ecfdf5;
-  --green-m: #a7f3d0;
-  --orange: #f97316;
-  --orange-l: #fff7ed;
-  --orange-m: #fed7aa;
-  --pink: #ec4899;
-  --pink-l: #fdf2f8;
-  --pink-m: #fbcfe8;
-  --purple: #8b5cf6;
-  --purple-l: #f5f3ff;
-  --purple-m: #ddd6fe;
-  --teal: #14b8a6;
-  --teal-l: #f0fdfa;
-  --radius: 14px;
-  --radius-sm: 9px;
-  --radius-lg: 22px;
-  --radius-xl: 32px;
-  --font-display: 'Nunito', sans-serif;
-  --font-body: 'Sora', sans-serif;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
-  --shadow: 0 4px 20px rgba(0,0,0,0.09);
-  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+/* ── RESET & VARS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --rouge:#E8173A;--or:#F5A623;--bleu:#1A2E6E;--cyan:#00C2CB;
+  --noir:#0D0D0D;--gris-f:#1A1A1A;--gris:#888;--gris-cl:#F4F3EF;--blanc:#FAFAF8;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 14px; line-height: 1.6; overflow-x: hidden; }
-/* ===== PAGES ===== */
-.page { display:none; min-height:100vh; }
-.page.active { display:block; }
-/* ===== UTILITY ===== */
-.flex { display:flex; }
-.flex-col { flex-direction:column; }
-.items-center { align-items:center; }
-.justify-between { justify-content:space-between; }
-.gap-1 { gap:.5rem; }
-.gap-2 { gap:1rem; }
-.w-full { width:100%; }
-.mb-1 { margin-bottom:.4rem; }
-.mb-2 { margin-bottom:1rem; }
-.text-muted { color:var(--text3); font-size:13px; }
-/* ===== NAV ===== */
-.topnav {
-  position:fixed; top:0; left:0; right:0; z-index:200;
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 0 2rem; height: 68px;
-  background: rgba(255,255,255,0.92); backdrop-filter:blur(20px);
-  border-bottom: 1.5px solid var(--border);
-  box-shadow: 0 2px 16px rgba(59,130,246,0.07);
+body{font-family:var(--sans);background:var(--blanc);color:var(--noir);font-size:16px;line-height:1.6;overflow-x:hidden}
+
+/* ── TOAST ── */
+#toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 20px;border-radius:6px;font-size:14px;font-weight:500;color:#fff;animation:toastIn .3s ease;max-width:320px;display:flex;align-items:center;gap:10px}
+.toast.success{background:#166534}.toast.error{background:#991B1B}.toast.info{background:var(--bleu)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── MODAL BASE ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;backdrop-filter:blur(4px);padding:24px;overflow-y:auto;align-items:flex-start;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--blanc);width:100%;border-radius:2px;animation:modalIn .25s ease;position:relative}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-close-btn{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.08);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:10}
+.modal-close-btn:hover{background:var(--rouge);color:#fff}
+
+/* ── AUTH MODAL ── */
+#auth-modal .modal-box{max-width:440px;margin-top:40px}
+.auth-header{background:var(--noir);color:#fff;padding:32px 36px 24px;position:relative}
+.auth-logo{font-family:var(--serif);font-size:24px;font-weight:900;margin-bottom:6px}
+.auth-logo span{color:var(--rouge)}
+.auth-subtitle{font-size:13px;color:rgba(255,255,255,.5);font-family:var(--mono)}
+.auth-body{padding:28px 36px 32px}
+.auth-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:2px solid #eee}
+.auth-tab{font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 20px;border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s}
+.auth-tab.active{color:var(--rouge);border-bottom-color:var(--rouge)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--gris);margin-bottom:6px}
+.form-group input{width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:4px;font-size:15px;font-family:var(--sans);background:#fff;color:var(--noir);transition:border-color .2s}
+.form-group input:focus{outline:none;border-color:var(--bleu)}
+.btn-primary{width:100%;padding:12px;background:var(--rouge);color:#fff;border:none;border-radius:4px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{background:#c0102b}
+.btn-primary:disabled{background:#ccc;cursor:not-allowed}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gris);font-size:13px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#eee}
+.google-btn{width:100%;padding:11px;border:1.5px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;font-weight:500;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s,background .2s}
+.google-btn:hover{border-color:#aaa;background:#fafafa}
+.google-icon{width:18px;height:18px}
+
+/* ── HEADER ── */
+header{border-bottom:3px solid var(--noir);position:sticky;top:0;background:var(--blanc);z-index:100}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;border-bottom:1px solid #ddd}
+.header-meta{font-family:var(--mono);font-size:11px;color:var(--gris);letter-spacing:.5px}
+.logo{font-family:var(--serif);font-size:32px;font-weight:900;letter-spacing:-1.5px;color:var(--noir);text-decoration:none}
+.logo em{font-style:normal;color:var(--rouge)}
+.logo sup{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--gris);margin-left:4px;letter-spacing:1px}
+.header-right{display:flex;align-items:center;gap:12px}
+.badge-school{font-family:var(--mono);font-size:10px;font-weight:500;background:var(--bleu);color:#fff;padding:4px 10px;border-radius:2px;letter-spacing:.5px;text-transform:uppercase}
+.icon-btn{width:36px;height:36px;border:1.5px solid var(--noir);border-radius:50%;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .2s,color .2s;font-family:var(--sans)}
+.icon-btn:hover{background:var(--noir);color:#fff}
+.user-chip{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border:1.5px solid #ddd;border-radius:20px;cursor:pointer;transition:border-color .2s;font-size:13px;font-weight:500}
+.user-chip:hover{border-color:var(--rouge)}
+.user-chip img,.user-chip .chip-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--bleu);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);font-weight:500}
+nav{display:flex;align-items:center;padding:0 40px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--noir);text-decoration:none;padding:14px 16px;border-bottom:3px solid transparent;white-space:nowrap;transition:border-color .2s,color .2s;cursor:pointer}
+nav a:hover,nav a.active{border-bottom-color:var(--rouge);color:var(--rouge)}
+
+/* ── TICKER ── */
+.ticker{background:var(--rouge);color:#fff;display:flex;align-items:center;overflow:hidden;height:34px}
+.ticker-label{background:var(--noir);color:#fff;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:2px;padding:0 16px;height:100%;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;text-transform:uppercase}
+.ticker-track{display:flex;animation:ticker 35s linear infinite;gap:0}
+.ticker-item{font-size:12px;font-weight:500;white-space:nowrap;padding:0 40px}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── LAYOUT ── */
+main{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* ── HERO ── */
+.hero{display:grid;grid-template-columns:1fr 340px;gap:0;border-bottom:2px solid var(--noir);margin:32px 0 0}
+.hero-main{padding:32px 32px 32px 0;border-right:1.5px solid #ddd}
+.hero-kicker{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--rouge);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.hero-kicker::before{content:'';display:inline-block;width:28px;height:2px;background:var(--rouge)}
+.hero h1{font-family:var(--serif);font-size:44px;font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:18px}
+.hero-excerpt{font-size:16px;color:#444;line-height:1.7;margin-bottom:24px;max-width:520px}
+.hero-footer{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.author-chip-sm{display:flex;align-items:center;gap:8px}
+.avatar-sm{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;color:#fff;flex-shrink:0}
+.read-btn{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;background:var(--rouge);color:#fff;border:none;padding:10px 22px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s}
+.read-btn:hover{background:var(--noir)}
+.hero-img{width:100%;height:220px;background:linear-gradient(135deg,var(--bleu) 0%,#0d1f4e 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-img::before{content:'ING1B';position:absolute;font-family:var(--serif);font-size:100px;font-weight:900;color:rgba(255,255,255,.07);letter-spacing:-5px}
+.img-label{position:absolute;bottom:16px;left:16px;background:var(--rouge);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px}
+.hero-side{padding:0 0 0 32px;display:flex;flex-direction:column}
+.side-article{padding:18px 0;border-bottom:1px solid #e5e5e5;cursor:pointer;transition:padding-left .2s}
+.side-article:last-child{border-bottom:none}
+.side-article:hover{padding-left:6px}
+.side-num{font-family:var(--mono);font-size:26px;font-weight:500;color:#e5e5e5;line-height:1;margin-bottom:6px}
+.side-cat{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.side-title{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.35;margin-bottom:5px}
+.side-meta{font-size:12px;color:var(--gris)}
+
+/* ── SECTIONS ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:32px 0 16px;border-bottom:2px solid var(--noir);margin-bottom:24px}
+.section-title{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:12px}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.see-all{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--gris);text-decoration:none;transition:color .2s}
+.see-all:hover{color:var(--rouge)}
+
+/* ── CARDS ── */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px}
+.article-card{cursor:pointer;transition:transform .2s;border:0.5px solid #eee}
+.article-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card-img{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:hidden}
+.card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.35) 0%,transparent 60%)}
+.card-body{padding:16px}
+.card-rubrique{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+.card-title{font-family:var(--serif);font-size:18px;font-weight:700;line-height:1.3;margin-bottom:8px}
+.card-excerpt{font-size:14px;color:#555;line-height:1.6;margin-bottom:12px}
+.card-footer{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--gris);border-top:1px solid #eee;padding-top:10px}
+.card-footer .mono{font-family:var(--mono)}
+.status-badge{font-size:10px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px}
+.status-published{background:#DCFCE7;color:#166534}
+.status-draft{background:#FEF3C7;color:#92400E}
+
+/* ── FEATURED ── */
+.featured-strip{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid var(--noir);margin-bottom:40px}
+.featured-img{background:linear-gradient(135deg,#1A2E6E,#0d1f4e);min-height:280px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;overflow:hidden}
+.featured-content{padding:36px;border-left:2px solid var(--noir);display:flex;flex-direction:column;justify-content:center}
+.featured-kicker{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px}
+.featured-title{font-family:var(--serif);font-size:28px;font-weight:900;line-height:1.2;letter-spacing:-1px;margin-bottom:14px}
+.featured-excerpt{font-size:15px;color:#555;line-height:1.7;margin-bottom:24px}
+
+/* ── DEUX COLONNES ── */
+.two-col{display:grid;grid-template-columns:2fr 1fr;gap:32px;margin-bottom:40px}
+
+/* ── AGENDA ── */
+.agenda-list{display:flex;flex-direction:column}
+.agenda-item{display:grid;grid-template-columns:64px 1fr auto;gap:16px;padding:16px 0;border-bottom:1px solid #e5e5e5;align-items:start}
+.agenda-item:last-child{border-bottom:none}
+.agenda-date{text-align:center;background:var(--gris-cl);padding:8px 4px;border-radius:4px}
+.agenda-date .day{font-family:var(--serif);font-size:24px;font-weight:900;line-height:1;color:var(--rouge)}
+.agenda-date .month{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gris)}
+.agenda-info h4{font-size:15px;font-weight:600;margin-bottom:3px}
+.agenda-info p{font-size:13px;color:var(--gris)}
+.agenda-tag{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;border-radius:2px;white-space:nowrap;align-self:start}
+
+/* ── SONDAGE ── */
+.poll-box{background:var(--gris-cl);padding:28px;border-left:4px solid var(--rouge)}
+.poll-question{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.3;margin-bottom:20px}
+.poll-option{margin-bottom:14px;cursor:pointer}
+.poll-option.voted-item .poll-bar-fill{opacity:1!important}
+.poll-opt-label{display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px}
+.poll-bar-track{height:8px;background:#ddd;overflow:hidden}
+.poll-bar-fill{height:100%;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.poll-total{font-family:var(--mono);font-size:11px;color:var(--gris);margin-top:16px;letter-spacing:.5px}
+.poll-login-note{font-size:13px;color:var(--gris);margin-top:12px;cursor:pointer;text-decoration:underline}
+
+/* ── ÉQUIPE ── */
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:40px}
+.team-card{text-align:center;padding:24px 16px;border:1px solid #e5e5e5;transition:border-color .2s,transform .2s}
+.team-card:hover{border-color:var(--rouge);transform:translateY(-2px)}
+.team-avatar-lg{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:20px;font-weight:500;color:#fff}
+.team-name{font-weight:600;font-size:15px;margin-bottom:4px}
+.team-role{font-size:12px;color:var(--gris);font-family:var(--mono);letter-spacing:.5px}
+
+/* ── ARTICLE READER MODAL ── */
+#reader-modal .modal-box{max-width:720px;margin:40px auto}
+.reader-header{background:var(--noir);color:#fff;padding:36px 44px 28px}
+.reader-kicker{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--rouge);margin-bottom:10px}
+.reader-title{font-family:var(--serif);font-size:30px;font-weight:900;line-height:1.2;margin-bottom:14px}
+.reader-meta{font-size:13px;color:rgba(255,255,255,.45);font-family:var(--mono)}
+.reader-body{padding:36px 44px}
+.reader-body p{font-size:16px;line-height:1.85;color:#333;margin-bottom:18px}
+.reader-body blockquote{border-left:3px solid var(--rouge);margin:28px 0;padding:12px 20px;background:var(--gris-cl);font-family:var(--serif);font-size:17px;font-style:italic}
+.reader-body h2{font-family:var(--serif);font-size:22px;font-weight:700;margin:28px 0 12px}
+
+/* ── ADMIN PANEL ── */
+#admin-panel{display:none;position:fixed;inset:0;background:var(--noir);z-index:200;overflow-y:auto}
+.admin-header{background:#111;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #333;position:sticky;top:0;z-index:10}
+.admin-logo{font-family:var(--serif);font-size:20px;font-weight:900;color:#fff}
+.admin-logo span{color:var(--rouge)}
+.admin-nav{display:flex;gap:4px}
+.admin-nav-btn{padding:7px 16px;background:transparent;border:1px solid #333;color:#aaa;border-radius:4px;cursor:pointer;font-size:13px;font-family:var(--sans);font-weight:500;transition:all .2s}
+.admin-nav-btn.active,.admin-nav-btn:hover{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.admin-close{background:transparent;border:1px solid #444;color:#aaa;padding:7px 14px;border-radius:4px;cursor:pointer;font-size:13px;font-family:var(--sans);transition:all .2s}
+.admin-close:hover{border-color:#fff;color:#fff}
+.admin-body{max-width:1100px;margin:0 auto;padding:32px}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-card{background:#111;border:1px solid #222;border-radius:6px;padding:24px;margin-bottom:16px}
+.admin-card h3{font-family:var(--serif);font-size:18px;font-weight:700;color:#fff;margin-bottom:16px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.admin-label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:6px;font-family:var(--mono)}
+.admin-input,.admin-select,.admin-textarea{width:100%;padding:10px 14px;background:#1a1a1a;border:1px solid #333;border-radius:4px;font-size:14px;font-family:var(--sans);color:#eee;transition:border-color .2s}
+.admin-input:focus,.admin-select:focus,.admin-textarea:focus{outline:none;border-color:var(--rouge)}
+.admin-textarea{min-height:180px;resize:vertical;line-height:1.6}
+.admin-select option{background:#1a1a1a}
+.btn-admin{padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-size:14px;font-weight:600;font-family:var(--sans);transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-admin.primary{background:var(--rouge);color:#fff}
+.btn-admin.primary:hover{background:#c0102b}
+.btn-admin.secondary{background:#222;color:#eee;border:1px solid #333}
+.btn-admin.secondary:hover{background:#333}
+.btn-admin.danger{background:#7f1d1d;color:#fca5a5}
+.btn-admin.danger:hover{background:#991b1b}
+.btn-admin.success{background:#14532d;color:#86efac}
+.btn-admin.success:hover{background:#166534}
+.btn-admin:disabled{opacity:.5;cursor:not-allowed}
+.articles-table{width:100%;border-collapse:collapse}
+.articles-table th{text-align:left;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#555;padding:10px 12px;border-bottom:1px solid #222}
+.articles-table td{padding:12px;border-bottom:1px solid #1a1a1a;vertical-align:middle;font-size:14px;color:#ccc}
+.articles-table tr:hover td{background:#0a0a0a}
+.articles-table .title-cell{font-weight:500;color:#fff;max-width:280px}
+.articles-table .title-cell small{display:block;font-size:12px;color:#555;font-weight:400;margin-top:2px;font-family:var(--mono)}
+.table-actions{display:flex;gap:6px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:#111;border:1px solid #222;border-radius:6px;padding:20px}
+.stat-num{font-family:var(--serif);font-size:36px;font-weight:900;color:#fff;line-height:1}
+.stat-label{font-family:var(--mono);font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+.users-table{width:100%;border-collapse:collapse}
+.users-table th{text-align:left;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#555;padding:10px 12px;border-bottom:1px solid #222}
+.users-table td{padding:12px;border-bottom:1px solid #1a1a1a;font-size:14px;color:#ccc;vertical-align:middle}
+.users-table tr:hover td{background:#0a0a0a}
+.role-badge{font-size:10px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:2px}
+.role-admin{background:#7c2d12;color:#fed7aa}
+.role-reader{background:#1e3a5f;color:#93c5fd}
+.agenda-admin-item{background:#111;border:1px solid #222;border-radius:4px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.agenda-admin-info{flex:1}
+.agenda-admin-info strong{color:#fff;font-size:14px}
+.agenda-admin-info small{display:block;font-size:12px;color:#555;font-family:var(--mono);margin-top:2px}
+.emoji-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.emoji-opt{width:36px;height:36px;border:1.5px solid #333;border-radius:4px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:all .2s;background:transparent}
+.emoji-opt.selected,.emoji-opt:hover{border-color:var(--rouge);background:#1a0005}
+
+/* ── FOOTER ── */
+footer{background:var(--noir);color:rgba(255,255,255,.7);margin-top:60px}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;padding:48px 40px 40px;max-width:1200px;margin:0 auto}
+.footer-logo{font-family:var(--serif);font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:12px}
+.footer-logo span{color:var(--rouge)}
+.footer-desc{font-size:14px;line-height:1.7}
+.footer-col h4{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:16px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-col ul li a{font-size:14px;color:rgba(255,255,255,.6);text-decoration:none;transition:color .2s}
+.footer-col ul li a:hover{color:var(--rouge)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;padding:18px 40px;max-width:1200px;margin:0 auto;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.5px}
+
+/* ── LOADING ── */
+.loading{display:flex;align-items:center;justify-content:center;padding:48px;flex-direction:column;gap:12px;color:var(--gris)}
+.spinner{width:32px;height:32px;border:3px solid #eee;border-top-color:var(--rouge);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:48px;color:var(--gris)}
+.empty-state p{font-size:15px;margin-top:8px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .header-top{padding:0 16px}.header-meta{display:none}
+  nav{padding:0 16px}
+  main{padding:0 16px}
+  .hero{grid-template-columns:1fr}
+  .hero-main{padding:24px 0;border-right:none;border-bottom:1.5px solid #ddd}
+  .hero-side{padding:0}
+  .hero h1{font-size:32px}
+  .cards-grid{grid-template-columns:1fr}
+  .featured-strip{grid-template-columns:1fr}
+  .featured-content{border-left:none;border-top:2px solid var(--noir)}
+  .two-col{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr;padding:32px 16px}
+  .footer-bottom{padding:16px;flex-direction:column;gap:8px;text-align:center}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  .admin-body{padding:16px}
 }
-.ksa-logo {
-  display:flex; align-items:center; gap:.5rem; cursor:pointer;
-  font-family: var(--font-display); font-size:22px; font-weight:900;
-}
-.ksa-logo .k { color: var(--blue); }
-.ksa-logo .s { color: var(--red); }
-.ksa-logo .a { color: var(--yellow); }
-.ksa-logo .dot { width:8px; height:8px; border-radius:50%; background: var(--green); margin-left:2px; display:inline-block; animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-.nav-links { display:flex; gap:1.8rem; align-items:center; }
-.nav-links a { color:var(--text2); text-decoration:none; font-size:14px; font-weight:500; transition:color .2s; cursor:pointer; }
-.nav-links a:hover { color:var(--blue); }
-.btn { padding:9px 22px; border-radius: var(--radius-sm); font-family:var(--font-body); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all .2s; letter-spacing:.01em; }
-.btn-outline { background:transparent; border:1.5px solid var(--border2); color:var(--text); }
-.btn-outline:hover { background:var(--bg); border-color:var(--blue); color:var(--blue); }
-.btn-blue { background:var(--blue); color:#fff; box-shadow:0 4px 14px rgba(59,130,246,0.3); }
-.btn-blue:hover { background:#2563eb; transform:translateY(-1px); box-shadow:0 6px 20px rgba(59,130,246,0.4); }
-.btn-sm { padding:6px 16px; font-size:13px; }
-.btn-lg { padding:14px 34px; font-size:16px; border-radius:var(--radius); }
-.btn-red { background:var(--red); color:#fff; box-shadow:0 4px 14px rgba(239,68,68,0.25); }
-.btn-red:hover { background:#dc2626; }
-.btn-green { background:var(--green); color:#fff; box-shadow:0 4px 14px rgba(16,185,129,0.25); }
-.btn-green:hover { background:#059669; }
-/* ===== LANDING ===== */
-.hero {
-  min-height: 100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding: 7rem 2rem 4rem; text-align:center; position:relative; overflow:hidden;
-}
-.hero-bg {
-  position:absolute; inset:0; pointer-events:none; overflow:hidden;
-}
-.hero-blob {
-  position:absolute; border-radius:50%; filter:blur(80px); opacity:.25;
-}
-.blob1 { width:500px; height:500px; background:var(--blue); top:-100px; left:-150px; animation:float1 8s ease-in-out infinite; }
-.blob2 { width:400px; height:400px; background:var(--pink); top:50px; right:-100px; animation:float2 10s ease-in-out infinite; }
-.blob3 { width:350px; height:350px; background:var(--yellow); bottom:-50px; left:30%; animation:float3 9s ease-in-out infinite; }
-.blob4 { width:300px; height:300px; background:var(--green); bottom:100px; right:10%; animation:float1 11s ease-in-out infinite reverse; }
-@keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-30px) scale(1.05)} }
-@keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,20px) scale(0.95)} }
-@keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(15px,-20px)} }
-.hero-badge {
-  display:inline-flex; align-items:center; gap:8px;
-  background: white; border:1.5px solid var(--border2); border-radius:100px;
-  padding:6px 18px; font-size:12px; font-weight:700; color:var(--blue);
-  margin-bottom:2rem; letter-spacing:.5px; box-shadow: var(--shadow-sm);
-  animation: fadeDown .6s ease both;
-}
-.hero-badge::before { content:'🎓'; }
-.hero h1 {
-  font-family:var(--font-display); font-size:clamp(2.8rem,6vw,5.2rem);
-  font-weight:900; line-height:1.05; margin-bottom:1.5rem; max-width:820px;
-  animation: fadeUp .7s .1s ease both;
-}
-.hero h1 .line1 { display:block; color:var(--text); }
-.hero h1 .line2 { display:block; background: linear-gradient(90deg, var(--blue), var(--purple), var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.hero p {
-  font-size:17px; color:var(--text2); max-width:520px; margin-bottom:2.5rem;
-  font-weight:400; line-height:1.75; animation: fadeUp .7s .2s ease both;
-}
-.hero-actions { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-bottom:4rem; animation: fadeUp .7s .3s ease both; }
-@keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-.features-grid {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
-  max-width:980px; margin:0 auto;
-  animation: fadeUp .7s .4s ease both;
-}
-.feat-card {
-  background:white; border-radius:var(--radius); padding:1.5rem;
-  border:1.5px solid var(--border); box-shadow: var(--shadow-sm);
-  transition:all .25s; text-align:left;
-}
-.feat-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
-.feat-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:1rem; }
-.feat-card h3 { font-family:var(--font-display); font-size:15px; font-weight:800; margin-bottom:.4rem; }
-.feat-card p { font-size:13px; color:var(--text2); line-height:1.65; }
-/* ===== MATIÈRES COLOR MAP ===== */
-.m-algo { --mc: var(--blue); --ml: var(--blue-l); }
-.m-em { --mc: var(--purple); --ml: var(--purple-l); }
-.m-ana { --mc: var(--green); --ml: var(--green-l); }
-.m-geo { --mc: var(--orange); --ml: var(--orange-l); }
-.m-idf { --mc: var(--teal); --ml: var(--teal-l); }
-.m-ate { --mc: var(--pink); --ml: var(--pink-l); }
-.m-ref { --mc: var(--red); --ml: var(--red-l); }
-.m-chi { --mc: var(--yellow); --ml: var(--yellow-l); }
-.m-ang { --mc: #06b6d4; --ml: #ecfeff; }
-/* ===== AUTH ===== */
-.auth-wrap {
-  min-height:100vh; display:flex; align-items:center; justify-content:center;
-  padding:5rem 1.5rem; position:relative; overflow:hidden;
-  background: linear-gradient(135deg, #eff6ff 0%, #fdf4ff 50%, #fff7ed 100%);
-}
-.auth-deco {
-  position:absolute; width:300px; height:300px; border-radius:50%;
-  filter:blur(60px); opacity:.2;
-}
-.deco1 { background:var(--blue); top:-80px; right:-80px; }
-.deco2 { background:var(--pink); bottom:-80px; left:-80px; }
-.auth-card {
-  background:white; border:1.5px solid var(--border); border-radius:var(--radius-xl);
-  padding:2.8rem; width:100%; max-width:440px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.1); position:relative; z-index:1;
-  animation: scaleIn .4s ease;
-}
-@keyframes scaleIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
-.auth-logo { font-family:var(--font-display); font-size:28px; font-weight:900; margin-bottom:1.8rem; text-align:center; }
-.auth-card h2 { font-family:var(--font-display); font-size:24px; font-weight:800; margin-bottom:.3rem; }
-.auth-card .sub { color:var(--text3); font-size:13px; margin-bottom:2rem; }
-.form-group { margin-bottom:1.2rem; }
-.form-group label { display:block; font-size:12px; font-weight:700; color:var(--text2); margin-bottom:.4rem; letter-spacing:.3px; text-transform:uppercase; }
-.form-group input, .form-group select, .form-group textarea {
-  width:100%; background:var(--bg2); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:11px 14px;
-  font-family:var(--font-body); font-size:14px; color:var(--text); transition:all .2s;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  outline:none; border-color:var(--blue); background:white;
-  box-shadow:0 0 0 3px rgba(59,130,246,0.1);
-}
-.auth-switch { text-align:center; margin-top:1.5rem; font-size:13px; color:var(--text2); }
-.auth-switch a { color:var(--blue); cursor:pointer; font-weight:600; }
-.divider { text-align:center; color:var(--text3); font-size:12px; margin:1.2rem 0; position:relative; }
-.divider::before, .divider::after { content:''; position:absolute; top:50%; width:42%; height:1px; background:var(--border); }
-.divider::before { left:0; } .divider::after { right:0; }
-/* ===== APP LAYOUT ===== */
-.app-layout { display:flex; min-height:100vh; background:var(--bg); }
-.sidebar {
-  width:268px; flex-shrink:0; background:white; border-right:1.5px solid var(--border);
-  display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:100;
-  box-shadow:4px 0 24px rgba(0,0,0,0.04);
-}
-.sidebar-top {
-  padding:1.4rem 1.4rem 1rem; border-bottom:1.5px solid var(--border);
-  background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-}
-.sidebar-brand { font-family:var(--font-display); font-size:20px; font-weight:900; }
-.sidebar-brand .k { color:var(--blue); } .sidebar-brand .s { color:var(--red); } .sidebar-brand .a { color:var(--yellow); }
-.sidebar-sub { font-size:11px; color:var(--text3); margin-top:2px; font-weight:500; }
-.sidebar-nav { flex:1; padding:.8rem; overflow-y:auto; }
-.nav-section { font-size:10px; font-weight:700; color:var(--text3); letter-spacing:1.2px; text-transform:uppercase; padding:.5rem .6rem; margin-top:.8rem; }
-.nav-item {
-  display:flex; align-items:center; gap:10px; padding:10px 12px;
-  border-radius:var(--radius-sm); cursor:pointer; transition:all .15s;
-  font-size:13px; font-weight:500; color:var(--text2); margin-bottom:2px;
-}
-.nav-item:hover { background:var(--bg2); color:var(--text); }
-.nav-item.active { background:var(--blue-l); color:var(--blue); font-weight:700; }
-.nav-item .icon { font-size:16px; width:22px; text-align:center; flex-shrink:0; }
-.nav-item .badge { margin-left:auto; background:var(--red); color:white; font-size:10px; font-weight:700; padding:2px 7px; border-radius:100px; }
-.sidebar-bottom { padding:1rem 1.2rem; border-top:1.5px solid var(--border); }
-.user-chip { display:flex; align-items:center; gap:10px; padding:.6rem; border-radius:var(--radius-sm); cursor:pointer; transition:all .2s; }
-.user-chip:hover { background:var(--bg2); }
-.avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; font-family:var(--font-display); }
-.avatar-blue { background:var(--blue-l); color:var(--blue); border:2px solid var(--blue-m); }
-.avatar-lg { width:50px; height:50px; font-size:17px; }
-.user-info .name { font-size:13px; font-weight:700; }
-.user-info .role { font-size:11px; color:var(--text3); }
-.main-content { margin-left:268px; flex:1; padding:2rem; min-height:100vh; max-width:calc(100vw - 268px); }
-.page-header { margin-bottom:2rem; }
-.page-header h2 { font-family:var(--font-display); font-size:26px; font-weight:900; }
-.page-header p { color:var(--text3); font-size:13px; margin-top:4px; }
-.section { display:none; }
-.section.active-section { display:block; }
-/* ===== CARDS ===== */
-.card { background:white; border:1.5px solid var(--border); border-radius:var(--radius); padding:1.5rem; box-shadow:var(--shadow-sm); }
-.card-sm { padding:1rem 1.2rem; }
-.card h3 { font-family:var(--font-display); font-size:16px; font-weight:800; margin-bottom:1rem; }
-.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; }
-.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
-.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
-.stat-card {
-  border-radius:var(--radius); padding:1.2rem 1.4rem;
-  border:1.5px solid var(--border); box-shadow:var(--shadow-sm); transition:all .2s;
-}
-.stat-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
-.stat-label { font-size:11px; color:var(--text3); margin-bottom:.4rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
-.stat-val { font-size:28px; font-weight:900; font-family:var(--font-display); line-height:1; }
-.stat-sub { font-size:11px; color:var(--text3); margin-top:.3rem; }
-/* TAGS */
-.tag { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:700; }
-.tag-blue { background:var(--blue-l); color:var(--blue); }
-.tag-red { background:var(--red-l); color:var(--red); }
-.tag-green { background:var(--green-l); color:var(--green); }
-.tag-yellow { background:var(--yellow-l); color:var(--yellow); }
-.tag-orange { background:var(--orange-l); color:var(--orange); }
-.tag-pink { background:var(--pink-l); color:var(--pink); }
-.tag-purple { background:var(--purple-l); color:var(--purple); }
-/* PROGRESS */
-.progress-bar { height:7px; background:var(--bg2); border-radius:100px; overflow:hidden; }
-.progress-fill { height:100%; border-radius:100px; transition:width .6s cubic-bezier(.4,0,.2,1); }
-/* ===== DASHBOARD ===== */
-.dash-greeting { font-family:var(--font-display); font-size:28px; font-weight:900; }
-.dash-date { font-size:13px; color:var(--text3); margin-top:3px; font-weight:500; }
-.subject-pill {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:5px 12px; border-radius:100px; font-size:12px; font-weight:700;
-  background:var(--ml,var(--blue-l)); color:var(--mc,var(--blue));
-}
-.conseil-card {
-  background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
-  border:1.5px solid var(--blue-m); border-radius:var(--radius); padding:1.2rem 1.4rem;
-}
-.task-item {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.7rem .8rem; border-radius:var(--radius-sm);
-  background:var(--bg2); margin-bottom:.5rem; border:1px solid var(--border);
-  font-size:13px; font-weight:500; transition:all .2s; cursor:pointer;
-}
-.task-item:hover { background:var(--blue-l); border-color:var(--blue-m); }
-.task-done { opacity:.5; text-decoration:line-through; }
-.task-dur { font-size:11px; color:var(--text3); font-weight:700; }
-/* ===== DAILY FORM ===== */
-.step-bar { display:flex; gap:.5rem; margin-bottom:2rem; align-items:center; }
-.step-pip {
-  flex:1; height:6px; border-radius:100px; background:var(--bg2);
-  transition:all .4s; position:relative;
-}
-.step-pip.done { background: linear-gradient(90deg, var(--blue), var(--purple)); }
-.step-pip.active { background: linear-gradient(90deg, var(--blue), var(--blue-m)); }
-.daily-step { display:none; }
-.daily-step.active { display:block; animation:fadeUp .3s ease; }
-.subject-check-label {
-  display:flex; align-items:center; gap:.7rem;
-  background:var(--bg2); padding:.7rem 1rem; border-radius:var(--radius-sm);
-  border:1.5px solid var(--border); cursor:pointer; font-size:13px; font-weight:600;
-  transition:all .2s;
-}
-.subject-check-label:hover { border-color:var(--blue); background:var(--blue-l); }
-.subject-check-label input:checked ~ * { color:var(--blue); }
-.subject-check-label input[type=checkbox] { accent-color:var(--blue); width:16px; height:16px; }
-.upload-card {
-  background:white; border:1.5px solid var(--border); border-radius:var(--radius);
-  padding:1rem 1.2rem; margin-bottom:.8rem; box-shadow:var(--shadow-sm);
-}
-.upload-card .subj-name { font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:space-between; margin-bottom:.7rem; }
-.upload-zone {
-  border:2px dashed var(--border2); border-radius:var(--radius-sm); padding:1.2rem;
-  text-align:center; cursor:pointer; transition:all .2s; font-size:13px; color:var(--text3);
-}
-.upload-zone:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-l); }
-.upload-zone .up-icon { font-size:1.8rem; margin-bottom:.4rem; }
-.gen-box {
-  text-align:center; padding:3rem 2rem;
-}
-.gen-icon { font-size:3.5rem; margin-bottom:1rem; display:block; animation: spin-bounce 1.5s ease-in-out infinite; }
-@keyframes spin-bounce { 0%,100%{transform:scale(1) rotate(0deg)} 50%{transform:scale(1.2) rotate(10deg)} }
-.gen-bar-wrap { max-width:400px; margin:1.5rem auto 0; }
-.gen-bar { height:8px; background:var(--bg2); border-radius:100px; overflow:hidden; margin-bottom:.8rem; }
-.gen-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink)); transition:width 1s ease; width:0%; }
-/* ===== FICHES ===== */
-.fiche-card {
-  background:white; border:1.5px solid var(--border); border-radius:var(--radius);
-  overflow:hidden; cursor:pointer; transition:all .25s; box-shadow:var(--shadow-sm);
-}
-.fiche-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
-.fiche-header {
-  padding:1rem 1.2rem; display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1.5px solid var(--border);
-}
-.fiche-color-bar { height:4px; border-radius:4px 4px 0 0; }
-.fiche-body { padding:1rem 1.2rem; }
-.fiche-section { margin-bottom:.8rem; }
-.fiche-section h5 { font-size:10px; text-transform:uppercase; letter-spacing:1px; font-weight:800; margin-bottom:.3rem; }
-.fiche-section p, .fiche-section li { font-size:12px; color:var(--text2); line-height:1.6; }
-.fiche-section ul { list-style:none; }
-.fiche-section li::before { content:'→ '; font-weight:700; }
-/* ===== EXERCICES ===== */
-.ex-card { background:white; border:1.5px solid var(--border); border-radius:var(--radius); padding:1.4rem; margin-bottom:1rem; box-shadow:var(--shadow-sm); }
-.ex-card .question { font-size:15px; font-weight:700; margin-bottom:1rem; line-height:1.5; }
-.choices { display:flex; flex-direction:column; gap:.5rem; }
-.choice {
-  display:flex; align-items:center; gap:.8rem; padding:10px 14px; border-radius:var(--radius-sm);
-  border:1.5px solid var(--border); cursor:pointer; transition:all .2s; font-size:13px; background:var(--bg2); font-weight:500;
-}
-.choice:hover { border-color:var(--blue); background:var(--blue-l); color:var(--blue); }
-.choice.selected { border-color:var(--blue); background:var(--blue-l); color:var(--blue); }
-.choice.correct { border-color:var(--green); background:var(--green-l); color:var(--green); }
-.choice.wrong { border-color:var(--red); background:var(--red-l); color:var(--red); }
-.choice-ltr { width:26px; height:26px; border-radius:50%; border:1.5px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
-.explication { background:var(--green-l); border:1.5px solid var(--green-m); border-radius:var(--radius-sm); padding:.8rem 1rem; margin-top:.8rem; font-size:13px; color:var(--green); display:none; font-weight:500; }
-.[explication.show](http://explication.show) { display:block; animation:fadeUp .2s ease; }
-/* ===== PROGRAMME ===== */
-.prog-day { background:white; border:1.5px solid var(--border); border-radius:var(--radius); margin-bottom:1rem; overflow:hidden; box-shadow:var(--shadow-sm); }
-.prog-day-header {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:1rem 1.2rem; background:var(--bg2); border-bottom:1.5px solid var(--border); cursor:pointer;
-}
-.prog-day-title { font-family:var(--font-display); font-size:14px; font-weight:800; }
-.prog-task { display:flex; align-items:center; gap:1rem; padding:.7rem 1.2rem; border-bottom:1px solid var(--border); font-size:13px; font-weight:500; }
-.prog-task:last-child { border-bottom:none; }
-.prog-task .dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-.prog-task .dur { margin-left:auto; color:var(--text3); font-size:12px; font-weight:700; }
-/* ===== DISCUSSION ===== */
-.chat-wrap { display:flex; flex-direction:column; height:calc(100vh - 220px); }
-.chat-messages { flex:1; overflow-y:auto; padding:.5rem 0 1rem; display:flex; flex-direction:column; gap:.8rem; }
-.msg { display:flex; gap:.7rem; max-width:80%; }
-.msg.user { align-self:flex-end; flex-direction:row-reverse; }
-.msg-bubble { padding:.7rem 1rem; border-radius:var(--radius); font-size:13px; line-height:1.65; font-weight:500; }
-.[msg.ai](http://msg.ai) .msg-bubble { background:white; border:1.5px solid var(--border); color:var(--text); border-top-left-radius:4px; box-shadow:var(--shadow-sm); }
-.msg.user .msg-bubble { background:var(--blue); color:white; border-top-right-radius:4px; }
-.msg-av { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; margin-top:4px; }
-.[msg.ai](http://msg.ai) .msg-av { background:linear-gradient(135deg,var(--blue),var(--purple)); color:white; }
-.msg.user .msg-av { background:var(--blue-l); color:var(--blue); border:2px solid var(--blue-m); }
-.chat-input-wrap { display:flex; gap:.8rem; padding:1rem 0 0; border-top:1.5px solid var(--border); }
-.chat-input {
-  flex:1; background:var(--bg2); border:1.5px solid var(--border); border-radius:var(--radius);
-  padding:10px 16px; font-family:var(--font-body); font-size:13px; color:var(--text); resize:none;
-  transition:all .2s; font-weight:500;
-}
-.chat-input:focus { outline:none; border-color:var(--blue); background:white; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
-.typing-indicator { display:none; }
-.[typing-indicator.show](http://typing-indicator.show) { display:flex; gap:4px; align-items:center; padding:.5rem 1rem; }
-.typing-dot { width:7px; height:7px; border-radius:50%; background:var(--text3); animation:typing .8s ease-in-out infinite; }
-.typing-dot:nth-child(2) { animation-delay:.15s; }
-.typing-dot:nth-child(3) { animation-delay:.3s; }
-@keyframes typing { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-6px);opacity:1} }
-/* ===== PROFIL ===== */
-.theme-swatch { width:32px; height:32px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:all .2s; }
-.theme-swatch.selected, .theme-swatch:hover { border-color:var(--text); transform:scale(1.15); }
-.setting-row { display:flex; align-items:center; justify-content:space-between; padding:.9rem 0; border-bottom:1px solid var(--border); }
-.setting-row:last-child { border-bottom:none; }
-.setting-label { font-size:14px; font-weight:600; }
-.setting-desc { font-size:12px; color:var(--text3); margin-top:2px; }
-/* TOGGLE */
-.toggle { position:relative; width:44px; height:24px; }
-.toggle input { opacity:0; width:0; height:0; }
-.toggle-slider { position:absolute; inset:0; background:var(--bg2); border-radius:100px; cursor:pointer; border:1.5px solid var(--border); transition:.3s; }
-.toggle-slider::before { content:''; position:absolute; width:16px; height:16px; border-radius:50%; background:white; left:3px; top:2px; transition:.3s; box-shadow:var(--shadow-sm); }
-.toggle input:checked + .toggle-slider { background:var(--blue); border-color:var(--blue); }
-.toggle input:checked + .toggle-slider::before { transform:translateX(20px); }
-/* ===== ADMIN ===== */
-#page-admin .sidebar { background: linear-gradient(180deg,#1e1b4b 0%,#1e3a5f 100%); border-color:rgba(255,255,255,.08); }
-#page-admin .sidebar-top { background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.08); }
-#page-admin .sidebar-brand { color:white; }
-#page-admin .sidebar-brand .k, #page-admin .sidebar-brand .s, #page-admin .sidebar-brand .a { color:white; }
-#page-admin .sidebar-sub { color:rgba(255,255,255,.4); }
-#page-admin .nav-section { color:rgba(255,255,255,.3); }
-#page-admin .nav-item { color:rgba(255,255,255,.6); }
-#page-admin .nav-item:hover { background:rgba(255,255,255,.08); color:white; }
-#page-admin .nav-item.active { background:rgba(255,255,255,.15); color:white; }
-#page-admin .sidebar-bottom { border-color:rgba(255,255,255,.08); }
-#page-admin .user-info .name { color:white; }
-#page-admin .user-info .role { color:rgba(255,255,255,.4); }
-#page-admin .avatar-blue { background:rgba(255,255,255,.15); color:white; border-color:rgba(255,255,255,.2); }
-#page-admin .user-chip:hover { background:rgba(255,255,255,.08); }
-.admin-section { display:none; }
-.admin-section.active-section { display:block; }
-.admin-stat { background:white; border-radius:var(--radius); padding:1.4rem; border:1.5px solid var(--border); box-shadow:var(--shadow-sm); }
-.admin-table { width:100%; border-collapse:collapse; }
-.admin-table th { font-size:11px; text-transform:uppercase; letter-spacing:.7px; font-weight:700; color:var(--text3); padding:.7rem 1rem; text-align:left; border-bottom:1.5px solid var(--border); }
-.admin-table td { padding:.75rem 1rem; font-size:13px; border-bottom:1px solid var(--border); font-weight:500; }
-.admin-table tr:last-child td { border-bottom:none; }
-.admin-table tr:hover td { background:var(--bg2); }
-.status-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
-.status-active { background:var(--green); }
-.status-inactive { background:var(--text3); }
-/* ===== TOAST ===== */
-.toast {
-  position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
-  background:var(--text); color:white; padding:.7rem 1.4rem; border-radius:100px;
-  font-size:13px; font-weight:600; z-index:9999; box-shadow:var(--shadow-lg);
-  animation:toastIn .3s ease;
-}
-@keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(12px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:var(--border2); border-radius:100px; }
-.section-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
-.section-row h3 { margin-bottom:0; }
-.mb-2x { margin-bottom:1.5rem; }
-.empty-state { text-align:center; padding:3rem 1rem; color:var(--text3); }
-.empty-state .ei { font-size:2.8rem; margin-bottom:.8rem; }
-.empty-state p { font-size:13px; }
+
+/* ── ANIM ── */
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
-<!-- =========== LANDING =========== -->
-<div id="page-landing" class="page active">
-  <nav class="topnav">
-    <div class="ksa-logo">
-      <span class="k">K</span><span class="s">S</span><span class="a">A</span><span class="dot"></span>
+
+<!-- ═══════════════════════════════════ TOASTS ══ -->
+<div id="toast-container"></div>
+
+<!-- ═══════════════════════════════════ AUTH MODAL ══ -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal-box">
+    <div class="auth-header">
+      <button class="modal-close-btn" onclick="closeAuth()">✕</button>
+      <div class="auth-logo">ING1B<span>Mag</span></div>
+      <div class="auth-subtitle">Institut Saint Jean Ingénieur · Yaoundé</div>
     </div>
-    <div class="nav-links">
-      <a onclick="scrollToSection('features')">Fonctionnalités</a>
-      <a onclick="scrollToSection('programme-section')">Programme</a>
-      <a href="https://kingsley.cm" target="_blank">Kingsley</a>
-    </div>
-    <div class="flex gap-1">
-      <button class="btn btn-outline btn-sm" onclick="showPage('login')">Connexion</button>
-      <button class="btn btn-blue btn-sm" onclick="showPage('register')">S'inscrire</button>
-    </div>
-  </nav>
-  <section class="hero">
-    <div class="hero-bg">
-      <div class="hero-blob blob1"></div>
-      <div class="hero-blob blob2"></div>
-      <div class="hero-blob blob3"></div>
-      <div class="hero-blob blob4"></div>
-    </div>
-    <div class="hero-badge">Exclusif aux étudiants Ingé1 — Kingsley</div>
-    <h1>
-      <span class="line1">Ton assistant</span>
-      <span class="line2">académique intelligent</span>
-    </h1>
-    <p>Fiches de révision automatiques, exercices personnalisés, planning d'étude sur mesure. Tout ce qu'il te faut pour réussir.</p>
-    <div class="hero-actions">
-      <button class="btn btn-blue btn-lg" onclick="showPage('register')">Commencer gratuitement 🚀</button>
-      <button class="btn btn-outline btn-lg" onclick="showPage('login')">Se connecter</button>
-    </div>
-    <div class="features-grid" id="features">
-      <div class="feat-card">
-        <div class="feat-icon" style="background:var(--blue-l);">📄</div>
-        <h3>Fiches automatiques</h3>
-        <p>Soumets ton cours PDF ou vidéo — une fiche de révision structurée est générée instantanément par l'IA.</p>
+    <div class="auth-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Connexion</button>
+        <button class="auth-tab" onclick="switchTab('register')">Créer un compte</button>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:var(--pink-l);">🧩</div>
-        <h3>Exercices sur mesure</h3>
-        <p>Des exercices créés selon ta matière et ton niveau, avec correction immédiate et explications détaillées.</p>
+
+      <!-- LOGIN -->
+      <div id="tab-login">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="ton.email@exemple.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-primary" id="login-btn" onclick="loginEmail()">Se connecter</button>
+        <div class="divider">ou</div>
+        <!-- Bouton Google injecté par le SDK -->
+        <div id="google-btn-login" style="display:flex;justify-content:center"></div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:var(--green-l);">📅</div>
-        <h3>Planning adaptatif</h3>
-        <p>Un programme de révision intelligent qui s'adapte à tes points forts et à tes lacunes.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:var(--purple-l);">💬</div>
-        <h3>Discussion IA</h3>
-        <p>Pose tes questions à ton assistant. Il connaît ton programme et ton historique d'apprentissage.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:var(--yellow-l);">📊</div>
-        <h3>Suivi de progression</h3>
-        <p>Visualise ta progression matière par matière et identifie ce qui demande plus d'attention.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:var(--orange-l);">🎨</div>
-        <h3>Interface personnalisable</h3>
-        <p>Adapte l'interface à tes goûts, ton style et ta façon d'apprendre.</p>
-      </div>
-    </div>
-  </section>
-</div>
-<!-- =========== LOGIN =========== -->
-<div id="page-login" class="page">
-  <div class="auth-wrap">
-    <div class="auth-deco deco1"></div>
-    <div class="auth-deco deco2"></div>
-    <div class="auth-card">
-      <div class="auth-logo">
-        <span style="color:var(--blue)">K</span><span style="color:var(--red)">S</span><span style="color:var(--yellow)">A</span>
-      </div>
-      <h2>Bon retour 👋</h2>
-      <p class="sub">Connecte-toi à ton espace étudiant</p>
-      <div class="form-group">
-        <label>Adresse email</label>
-        <input type="email" id="login-email" placeholder="votre@email.com">
-      </div>
-      <div class="form-group">
-        <label>Mot de passe</label>
-        <input type="password" id="login-pass" placeholder="••••••••">
-      </div>
-      <button class="btn btn-blue w-full" style="margin-top:.5rem;" onclick="loginUser()">Se connecter</button>
-      <div class="divider">ou</div>
-      <button class="btn btn-outline w-full" onclick="showAdminLoginModal()">🔐 Connexion Administrateur</button>
-      <div class="auth-switch">Pas encore de compte ? <a onclick="showPage('register')">S'inscrire</a></div>
-      <div style="text-align:center;margin-top:.5rem;">
-        <a onclick="showPage('landing')" style="font-size:12px;color:var(--text3);cursor:pointer;">← Retour à l'accueil</a>
+
+      <!-- REGISTER -->
+      <div id="tab-register" style="display:none">
+        <div class="form-group">
+          <label>Nom complet</label>
+          <input type="text" id="reg-name" placeholder="Prénom Nom">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="ton.email@exemple.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe (6 caractères min.)</label>
+          <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <button class="btn-primary" id="register-btn" onclick="registerEmail()">Créer mon compte</button>
+        <div class="divider">ou</div>
+        <div id="google-btn-register" style="display:flex;justify-content:center"></div>
       </div>
     </div>
   </div>
 </div>
-<!-- =========== REGISTER =========== -->
-<div id="page-register" class="page">
-  <div class="auth-wrap">
-    <div class="auth-deco deco1" style="background:var(--green)"></div>
-    <div class="auth-deco deco2" style="background:var(--yellow)"></div>
-    <div class="auth-card">
-      <div class="auth-logo">
-        <span style="color:var(--blue)">K</span><span style="color:var(--red)">S</span><span style="color:var(--yellow)">A</span>
+
+<!-- ═══════════════════════════════════ READER MODAL ══ -->
+<div class="modal-overlay" id="reader-modal">
+  <div class="modal-box">
+    <div class="reader-header">
+      <button class="modal-close-btn" style="background:rgba(255,255,255,.1);color:#fff" onclick="closeReader()">✕</button>
+      <div class="reader-kicker" id="r-kicker"></div>
+      <div class="reader-title" id="r-title"></div>
+      <div class="reader-meta" id="r-meta"></div>
+    </div>
+    <div class="reader-body" id="r-body"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ ADMIN PANEL ══ -->
+<div id="admin-panel">
+  <div class="admin-header">
+    <div class="admin-logo">ING1B<span>Mag</span> <span style="font-family:var(--mono);font-size:12px;color:#555;font-weight:400">Admin</span></div>
+    <div class="admin-nav">
+      <button class="admin-nav-btn active" onclick="adminTab('dashboard')">Dashboard</button>
+      <button class="admin-nav-btn" onclick="adminTab('articles')">Articles</button>
+      <button class="admin-nav-btn" onclick="adminTab('new-article')">+ Nouvel article</button>
+      <button class="admin-nav-btn" onclick="adminTab('agenda')">Agenda</button>
+      <button class="admin-nav-btn" onclick="adminTab('users')">Membres</button>
+    </div>
+    <button class="admin-close" onclick="closeAdmin()">← Retour au site</button>
+  </div>
+  <div class="admin-body">
+
+    <!-- DASHBOARD -->
+    <div class="admin-section active" id="sec-dashboard">
+      <div class="stat-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="stat-articles">—</div><div class="stat-label">Articles publiés</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-drafts">—</div><div class="stat-label">Brouillons</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-members">—</div><div class="stat-label">Membres inscrits</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-views">—</div><div class="stat-label">Vues totales</div></div>
       </div>
-      <h2>Créer un compte</h2>
-      <p class="sub">Rejoins l'assistant académique Ingé1</p>
-      <div class="grid-2" style="gap:.8rem;">
-        <div class="form-group"><label>Prénom</label><input type="text" id="reg-prenom" placeholder="Ton prénom"></div>
-        <div class="form-group"><label>Nom</label><input type="text" id="reg-nom" placeholder="Ton nom"></div>
-      </div>
-      <div class="form-group">
-        <label>Adresse email</label>
-        <input type="email" id="reg-email" placeholder="votre@email.com">
-      </div>
-      <div class="form-group">
-        <label>Mot de passe</label>
-        <input type="password" id="reg-pass" placeholder="Minimum 8 caractères">
-      </div>
-      <button class="btn btn-blue w-full" onclick="registerUser()">Créer mon compte 🎓</button>
-      <div class="auth-switch">Déjà inscrit ? <a onclick="showPage('login')">Se connecter</a></div>
-      <div style="text-align:center;margin-top:.5rem;">
-        <a onclick="showPage('landing')" style="font-size:12px;color:var(--text3);cursor:pointer;">← Retour à l'accueil</a>
+      <div class="admin-card">
+        <h3>Derniers articles</h3>
+        <div id="dash-articles-list"></div>
       </div>
     </div>
-  </div>
-</div>
-<!-- =========== APP ÉTUDIANT =========== -->
-<div id="page-app" class="page">
-  <div class="app-layout">
-    <aside class="sidebar">
-      <div class="sidebar-top">
-        <div class="sidebar-brand"><span class="k">K</span><span class="s">S</span><span class="a">A</span></div>
-        <div class="sidebar-sub">Ingé1 — Kingsley School</div>
+
+    <!-- ARTICLES LIST -->
+    <div class="admin-section" id="sec-articles">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:#fff">Tous les articles</div>
+        <button class="btn-admin primary" onclick="adminTab('new-article')">+ Nouvel article</button>
       </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">Principal</div>
-        <div class="nav-item active" onclick="showSection('dashboard')">
-          <span class="icon">◉</span> Tableau de bord
-        </div>
-        <div class="nav-item" onclick="showSection('daily')">
-          <span class="icon">📋</span> Cours du jour
-          <span class="badge">!</span>
-        </div>
-        <div class="nav-section">Révisions</div>
-        <div class="nav-item" onclick="showSection('fiches')">
-          <span class="icon">📚</span> Mes fiches
-        </div>
-        <div class="nav-item" onclick="showSection('exercices')">
-          <span class="icon">✏️</span> Exercices
-        </div>
-        <div class="nav-item" onclick="showSection('programme')">
-          <span class="icon">📅</span> Programme
-        </div>
-        <div class="nav-section">Communauté</div>
-        <div class="nav-item" onclick="showSection('discussion')">
-          <span class="icon">💬</span> Discussion IA
-        </div>
-        <div class="nav-section">Compte</div>
-        <div class="nav-item" onclick="showSection('profil')">
-          <span class="icon">⚙️</span> Personnaliser
-        </div>
-        <div class="nav-item" style="color:var(--red);" onclick="showPage('landing')">
-          <span class="icon">↩</span> Déconnexion
-        </div>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="user-chip">
-          <div class="avatar avatar-blue" id="sidebar-avatar">?</div>
-          <div class="user-info">
-            <div class="name" id="sidebar-name">—</div>
-            <div class="role">Étudiant Ingé1</div>
-          </div>
-        </div>
+      <div class="admin-card" style="padding:0;overflow:hidden">
+        <table class="articles-table">
+          <thead><tr>
+            <th>Titre</th><th>Rubrique</th><th>Statut</th><th>Vues</th><th>Date</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="admin-articles-tbody"></tbody>
+        </table>
       </div>
-    </aside>
-    <main class="main-content">
-      <!-- DASHBOARD -->
-      <div id="section-dashboard" class="section active-section">
-        <div class="page-header">
-          <div class="dash-greeting" id="dash-greeting">Bonjour 👋</div>
-          <div class="dash-date" id="dash-date"></div>
-        </div>
-        <div class="grid-4 mb-2x">
-          <div class="stat-card" style="background:var(--blue-l);border-color:var(--blue-m);">
-            <div class="stat-label">Fiches créées</div>
-            <div class="stat-val" id="stat-fiches" style="color:var(--blue);">—</div>
-            <div class="stat-sub">ce semestre</div>
-          </div>
-          <div class="stat-card" style="background:var(--pink-l);border-color:var(--pink-m);">
-            <div class="stat-label">Exercices traités</div>
-            <div class="stat-val" id="stat-exercices" style="color:var(--pink);">—</div>
-            <div class="stat-sub" id="stat-exercices-sub"></div>
-          </div>
-          <div class="stat-card" style="background:var(--green-l);border-color:var(--green-m);">
-            <div class="stat-label">Jours consécutifs</div>
-            <div class="stat-val" id="stat-streak" style="color:var(--green);">—</div>
-            <div class="stat-sub">🔥 en cours</div>
-          </div>
-          <div class="stat-card" style="background:var(--orange-l);border-color:var(--orange-m);">
-            <div class="stat-label">Prochaine révision</div>
-            <div class="stat-val" id="stat-revision" style="color:var(--orange);font-size:18px;">—</div>
-            <div class="stat-sub" id="stat-revision-sub">—</div>
-          </div>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="section-row">
-              <h3>Progression par matière</h3>
-              <span class="tag tag-blue">Ce mois</span>
-            </div>
-            <div id="progression-bars" style="display:flex;flex-direction:column;gap:1rem;"><div class="empty-state"><div class="ei">📊</div><p>Connecte-toi pour voir ta progression</p></div></div>
+    </div>
+
+    <!-- NEW / EDIT ARTICLE -->
+    <div class="admin-section" id="sec-new-article">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:#fff;margin-bottom:20px" id="article-form-title">Nouvel article</div>
+      <input type="hidden" id="edit-article-id">
+      <div class="admin-card">
+        <div class="form-row">
+          <div>
+            <label class="admin-label">Titre *</label>
+            <input class="admin-input" id="f-title" placeholder="Titre de l'article">
           </div>
           <div>
-            <div class="card mb-2">
-              <div class="section-row">
-                <h3>Tâches du jour</h3>
-                <span class="tag tag-red">3 restantes</span>
-              </div>
-              <div id="tasks-list"><div class="empty-state"><div class="ei">✅</div><p>Aucune tâche pour aujourd'hui</p></div></div>
-            </div>
-            <div class="conseil-card">
-              <div class="flex gap-2 items-center">
-                <div style="font-size:2rem;">💡</div>
-                <div>
-                  <div style="font-size:13px;font-weight:800;color:var(--blue);">Conseil du jour</div>
-                  <div id="conseil-text" style="font-size:13px;color:var(--text2);margin-top:3px;">Soumets tes cours du jour pour recevoir un conseil personnalisé.</div>
-                </div>
-              </div>
-              <button class="btn btn-blue btn-sm" style="margin-top:.8rem;width:100%;" onclick="showSection('daily')">Soumettre les cours du jour →</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- COURS DU JOUR -->
-      <div id="section-daily" class="section">
-        <div class="page-header">
-          <h2>Cours du jour 📋</h2>
-          <p>Soumets tes cours et reçois tes fiches de révision en quelques secondes</p>
-        </div>
-        <div class="card" style="max-width:720px;">
-          <div class="step-bar">
-            <div class="step-pip active" id="pip-0"></div>
-            <div class="step-pip" id="pip-1"></div>
-            <div class="step-pip" id="pip-2"></div>
-          </div>
-          <!-- ÉTAPE 1 -->
-          <div class="daily-step active" id="step-1">
-            <h3 style="margin-bottom:.3rem;">Quelles matières as-tu eu aujourd'hui ?</h3>
-            <p class="text-muted mb-2">Sélectionne toutes les matières du jour</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem;" id="subj-checks">
-              <label class="subject-check-label"><input type="checkbox" value="Algorithmique" onchange="toggleSubject(this)"> 🔵 Algorithmique</label>
-              <label class="subject-check-label"><input type="checkbox" value="Électromagnétisme" onchange="toggleSubject(this)"> 🟣 Électromagnétisme</label>
-              <label class="subject-check-label"><input type="checkbox" value="Analyse II" onchange="toggleSubject(this)"> 🟢 Analyse II</label>
-              <label class="subject-check-label"><input type="checkbox" value="Géométrie" onchange="toggleSubject(this)"> 🟠 Géométrie</label>
-              <label class="subject-check-label"><input type="checkbox" value="IDFOT" onchange="toggleSubject(this)"> 🩵 IDFOT (Dessin technique)</label>
-              <label class="subject-check-label"><input type="checkbox" value="Atelier d'écriture" onchange="toggleSubject(this)"> 🩷 Atelier d'écriture</label>
-              <label class="subject-check-label"><input type="checkbox" value="Réflexion humaine" onchange="toggleSubject(this)"> 🔴 Réflexion humaine</label>
-              <label class="subject-check-label"><input type="checkbox" value="Chimie" onchange="toggleSubject(this)"> 🟡 Chimie</label>
-              <label class="subject-check-label"><input type="checkbox" value="Anglais A2" onchange="toggleSubject(this)"> 🌐 Anglais A2</label>
-            </div>
-            <button class="btn btn-blue" onclick="goStep(2)">Continuer →</button>
-          </div>
-          <!-- ÉTAPE 2 -->
-          <div class="daily-step" id="step-2">
-            <h3 style="margin-bottom:.3rem;">Soumettre les cours</h3>
-            <p class="text-muted mb-2">Pour chaque matière, ajoute le PDF ou la vidéo du cours</p>
-            <div id="upload-cards"></div>
-            <div class="flex gap-1" style="margin-top:1.2rem;">
-              <button class="btn btn-outline" onclick="goStep(1)">← Retour</button>
-              <button class="btn btn-blue" onclick="goStep(3)">Générer mes fiches ✨</button>
-            </div>
-          </div>
-          <!-- ÉTAPE 3 : GÉNÉRATION -->
-          <div class="daily-step" id="step-3">
-            <div class="gen-box">
-              <span class="gen-icon" id="gen-icon">🤖</span>
-              <div id="gen-title" style="font-family:var(--font-display);font-size:20px;font-weight:900;">Analyse en cours…</div>
-              <div id="gen-sub" style="color:var(--text3);font-size:13px;margin-top:.4rem;">Extraction des concepts clés</div>
-              <div class="gen-bar-wrap">
-                <div class="gen-bar"><div class="gen-fill" id="gen-fill"></div></div>
-                <div id="gen-pct" style="font-size:12px;color:var(--text3);font-weight:700;text-align:center;">0%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- FICHES -->
-      <div id="section-fiches" class="section">
-        <div class="page-header">
-          <div class="section-row" style="margin-bottom:0;">
-            <div>
-              <h2>Mes fiches 📚</h2>
-              <p>Tes fiches de révision générées automatiquement</p>
-            </div>
-            <div class="flex gap-1">
-              <select style="background:white;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--text);">
-                <option>Toutes les matières</option>
-                <option>Algorithmique</option>
-                <option>Électromagnétisme</option>
-                <option>Analyse II</option>
-                <option>Géométrie</option>
-                <option>Chimie</option>
-                <option>Anglais A2</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="grid-3">
-          <div class="fiche-card">
-            <div class="fiche-color-bar" style="background:var(--blue);height:5px;"></div>
-            <div class="fiche-header">
-              <div>
-                <div style="font-family:var(--font-display);font-size:15px;font-weight:800;">Tri rapide — Algorithmique</div>
-                <div class="tag tag-blue" style="margin-top:.3rem;">Algorithmique</div>
-              </div>
-              <div style="font-size:12px;color:var(--text3);">25 Avr.</div>
-            </div>
-            <div class="fiche-body">
-              <div class="fiche-section">
-                <h5 style="color:var(--blue);">Définition</h5>
-                <p>Algorithme de tri par division récursive — O(n log n) en moyenne, O(n²) au pire cas.</p>
-              </div>
-              <div class="fiche-section">
-                <h5 style="color:var(--blue);">Points clés</h5>
-                <ul>
-                  <li>Choisir un pivot</li>
-                  <li>Partitionner le tableau</li>
-                  <li>Récursion sur les deux parties</li>
-                  <li>In-place : pas d'espace supplémentaire</li>
-                </ul>
-              </div>
-              <button class="btn btn-blue btn-sm w-full" style="margin-top:.8rem;" onclick="toast('Fiche ouverte !')">Voir la fiche complète</button>
-            </div>
-          </div>
-          <div class="fiche-card">
-            <div class="fiche-color-bar" style="background:var(--green);height:5px;"></div>
-            <div class="fiche-header">
-              <div>
-                <div style="font-family:var(--font-display);font-size:15px;font-weight:800;">Séries entières — Analyse II</div>
-                <div class="tag tag-green" style="margin-top:.3rem;">Analyse II</div>
-              </div>
-              <div style="font-size:12px;color:var(--text3);">26 Avr.</div>
-            </div>
-            <div class="fiche-body">
-              <div class="fiche-section">
-                <h5 style="color:var(--green);">Définition</h5>
-                <p>Série de la forme Σ aₙ·xⁿ. Rayon de convergence R détermine l'intervalle de convergence.</p>
-              </div>
-              <div class="fiche-section">
-                <h5 style="color:var(--green);">Points clés</h5>
-                <ul>
-                  <li>Règle de d'Alembert pour R</li>
-                  <li>Convergence absolue dans ]-R, R[</li>
-                  <li>Développements usuels (exp, sin, cos)</li>
-                </ul>
-              </div>
-              <button class="btn btn-green btn-sm w-full" style="margin-top:.8rem;" onclick="toast('Fiche ouverte !')">Voir la fiche complète</button>
-            </div>
-          </div>
-          <div class="fiche-card">
-            <div class="fiche-color-bar" style="background:var(--red);height:5px;"></div>
-            <div class="fiche-header">
-              <div>
-                <div style="font-family:var(--font-display);font-size:15px;font-weight:800;">Liaisons chimiques</div>
-                <div class="tag tag-red" style="margin-top:.3rem;">Chimie</div>
-              </div>
-              <div style="font-size:12px;color:var(--text3);">24 Avr.</div>
-            </div>
-            <div class="fiche-body">
-              <div class="fiche-section">
-                <h5 style="color:var(--red);">Définition</h5>
-                <p>Forces d'attraction entre atomes/molécules. Types principaux : covalente, ionique, métallique.</p>
-              </div>
-              <div class="fiche-section">
-                <h5 style="color:var(--red);">Points clés</h5>
-                <ul>
-                  <li>Liaison covalente : partage d'électrons</li>
-                  <li>Liaison ionique : transfert e⁻</li>
-                  <li>Électronégativité (Pauling)</li>
-                </ul>
-              </div>
-              <button class="btn btn-red btn-sm w-full" style="margin-top:.8rem;" onclick="toast('Fiche ouverte !')">Voir la fiche complète</button>
-            </div>
-          </div>
-          <div class="fiche-card">
-            <div class="fiche-color-bar" style="background:var(--purple);height:5px;"></div>
-            <div class="fiche-header">
-              <div>
-                <div style="font-family:var(--font-display);font-size:15px;font-weight:800;">Loi de Gauss — Électromagnétisme</div>
-                <div class="tag tag-purple" style="margin-top:.3rem;">Électromagnétisme</div>
-              </div>
-              <div style="font-size:12px;color:var(--text3);">23 Avr.</div>
-            </div>
-            <div class="fiche-body">
-              <div class="fiche-section">
-                <h5 style="color:var(--purple);">Définition</h5>
-                <p>Le flux du champ électrique à travers une surface fermée est proportionnel à la charge intérieure.</p>
-              </div>
-              <div class="fiche-section">
-                <h5 style="color:var(--purple);">Points clés</h5>
-                <ul>
-                  <li>∮ E·dA = Q_enc / ε₀</li>
-                  <li>Application aux symétries</li>
-                  <li>Surface de Gauss</li>
-                </ul>
-              </div>
-              <button class="btn" style="background:var(--purple);color:white;width:100%;margin-top:.8rem;font-size:13px;padding:6px 14px;border-radius:var(--radius-sm);" onclick="toast('Fiche ouverte !')">Voir la fiche complète</button>
-            </div>
-          </div>
-          <div class="fiche-card">
-            <div class="fiche-color-bar" style="background:var(--orange);height:5px;"></div>
-            <div class="fiche-header">
-              <div>
-                <div style="font-family:var(--font-display);font-size:15px;font-weight:800;">Coniques — Géométrie</div>
-                <div class="tag tag-orange" style="margin-top:.3rem;">Géométrie</div>
-              </div>
-              <div style="font-size:12px;color:var(--text3);">22 Avr.</div>
-            </div>
-            <div class="fiche-body">
-              <div class="fiche-section">
-                <h5 style="color:var(--orange);">Définition</h5>
-                <p>Courbes obtenues par intersection d'un cône avec un plan : ellipse, parabole, hyperbole.</p>
-              </div>
-              <div class="fiche-section">
-                <h5 style="color:var(--orange);">Points clés</h5>
-                <ul>
-                  <li>Équation cartésienne de chaque conique</li>
-                  <li>Foyer, directrice, excentricité e</li>
-                  <li>Réduction de forme canonique</li>
-                </ul>
-              </div>
-              <button class="btn btn-sm w-full" style="background:var(--orange);color:white;margin-top:.8rem;border-radius:var(--radius-sm);" onclick="toast('Fiche ouverte !')">Voir la fiche complète</button>
-            </div>
-          </div>
-          <div class="fiche-card" style="border:2px dashed var(--border2);background:var(--bg2);cursor:pointer;" onclick="showSection('daily')">
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;text-align:center;padding:1.5rem;">
-              <div style="font-size:2.5rem;margin-bottom:.7rem;">➕</div>
-              <div style="font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--text2);">Nouvelle fiche</div>
-              <div style="font-size:12px;color:var(--text3);margin-top:.4rem;">Soumets un cours pour générer</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- EXERCICES -->
-      <div id="section-exercices" class="section">
-        <div class="page-header">
-          <div class="section-row" style="margin-bottom:0;">
-            <div>
-              <h2>Exercices ✏️</h2>
-              <p>Entraîne-toi avec des exercices générés par l'IA selon ton niveau</p>
-            </div>
-            <button class="btn btn-blue btn-sm" onclick="toast('Nouveaux exercices générés !')">+ Générer de nouveaux exercices</button>
-          </div>
-        </div>
-        <div class="flex gap-1 mb-2">
-          <button class="btn btn-blue btn-sm">Algorithmique</button>
-          <button class="btn btn-outline btn-sm">Analyse II</button>
-          <button class="btn btn-outline btn-sm">Chimie</button>
-          <button class="btn btn-outline btn-sm">Géométrie</button>
-          <button class="btn btn-outline btn-sm">Tous</button>
-        </div>
-        <div class="ex-card">
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;">
-            <span class="tag tag-blue">Algorithmique</span>
-            <span class="tag tag-green">Facile</span>
-          </div>
-          <div class="question">1. Quelle est la complexité temporelle du tri rapide (QuickSort) dans le cas moyen ?</div>
-          <div class="choices" id="q1-choices">
-            <div class="choice" onclick="selectChoice('q1',0,'wrong')"><span class="choice-ltr">A</span>O(n²)</div>
-            <div class="choice" onclick="selectChoice('q1',1,'correct')"><span class="choice-ltr">B</span>O(n log n)</div>
-            <div class="choice" onclick="selectChoice('q1',2,'wrong')"><span class="choice-ltr">C</span>O(n)</div>
-            <div class="choice" onclick="selectChoice('q1',3,'wrong')"><span class="choice-ltr">D</span>O(log n)</div>
-          </div>
-          <div class="explication" id="exp-q1">✅ Correct ! En cas moyen, le QuickSort divise le tableau en deux parties équilibrées à chaque récursion, donnant O(n log n). Le pire cas O(n²) se produit si le pivot est toujours le plus grand/petit élément.</div>
-        </div>
-        <div class="ex-card">
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;">
-            <span class="tag tag-green">Analyse II</span>
-            <span class="tag tag-orange">Moyen</span>
-          </div>
-          <div class="question">2. Le rayon de convergence de la série Σ xⁿ/n! est :</div>
-          <div class="choices" id="q2-choices">
-            <div class="choice" onclick="selectChoice('q2',0,'wrong')"><span class="choice-ltr">A</span>R = 0</div>
-            <div class="choice" onclick="selectChoice('q2',1,'wrong')"><span class="choice-ltr">B</span>R = 1</div>
-            <div class="choice" onclick="selectChoice('q2',2,'correct')"><span class="choice-ltr">C</span>R = +∞</div>
-            <div class="choice" onclick="selectChoice('q2',3,'wrong')"><span class="choice-ltr">D</span>R = e</div>
-          </div>
-          <div class="explication" id="exp-q2">✅ Correct ! Par la règle de d'Alembert : lim |aₙ₊₁/aₙ| = lim 1/(n+1) = 0 < 1 pour tout x. Donc R = +∞ et la série converge sur ℝ entier. C'est la série exponentielle eˣ.</div>
-        </div>
-        <div class="ex-card">
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;">
-            <span class="tag tag-red">Chimie</span>
-            <span class="tag tag-red">Difficile</span>
-          </div>
-          <div class="question">3. Dans une liaison covalente polaire, les électrons sont :</div>
-          <div class="choices" id="q3-choices">
-            <div class="choice" onclick="selectChoice('q3',0,'wrong')"><span class="choice-ltr">A</span>Partagés également entre les deux atomes</div>
-            <div class="choice" onclick="selectChoice('q3',1,'correct')"><span class="choice-ltr">B</span>Attirés davantage vers l'atome le plus électronégatif</div>
-            <div class="choice" onclick="selectChoice('q3',2,'wrong')"><span class="choice-ltr">C</span>Transférés complètement à un atome</div>
-            <div class="choice" onclick="selectChoice('q3',3,'wrong')"><span class="choice-ltr">D</span>Libres de se déplacer</div>
-          </div>
-          <div class="explication" id="exp-q3">✅ Correct ! Dans une liaison covalente polaire, les électrons sont partagés mais inégalement — l'atome le plus électronégatif les attire davantage, créant un dipôle électrique partiel δ- et δ+.</div>
-        </div>
-      </div>
-      <!-- PROGRAMME -->
-      <div id="section-programme" class="section">
-        <div class="page-header">
-          <h2>Programme de révision 📅</h2>
-          <p>Planning adapté à tes difficultés et objectifs — semaine du 27 Avr. au 3 Mai 2026</p>
-        </div>
-        <div class="grid-2">
-          <div>
-            <div class="prog-day">
-              <div class="prog-day-header">
-                <div>
-                  <div class="prog-day-title">Lundi 27 Avril</div>
-                  <div style="font-size:11px;color:var(--text3);">Aujourd'hui • 95 min</div>
-                </div>
-                <span class="tag tag-blue">3 tâches</span>
-              </div>
-              <div class="prog-task"><div class="dot" style="background:var(--blue)"></div>Algorithmique — Révision Tri rapide<span class="dur">45 min</span></div>
-              <div class="prog-task"><div class="dot" style="background:var(--red)"></div>Chimie — Liaisons chimiques<span class="dur">30 min</span></div>
-              <div class="prog-task"><div class="dot" style="background:var(--yellow)"></div>Anglais A2 — Exercices écrits<span class="dur">20 min</span></div>
-            </div>
-            <div class="prog-day">
-              <div class="prog-day-header">
-                <div>
-                  <div class="prog-day-title">Mardi 28 Avril</div>
-                  <div style="font-size:11px;color:var(--text3);">Demain • 80 min</div>
-                </div>
-                <span class="tag tag-purple">3 tâches</span>
-              </div>
-              <div class="prog-task"><div class="dot" style="background:var(--purple)"></div>Électromagnétisme — Loi de Gauss<span class="dur">40 min</span></div>
-              <div class="prog-task"><div class="dot" style="background:var(--green)"></div>Analyse II — Séries entières<span class="dur">25 min</span></div>
-              <div class="prog-task"><div class="dot" style="background:var(--teal)"></div>IDFOT — Révision normes dessin<span class="dur">15 min</span></div>
-            </div>
-            <div class="prog-day">
-              <div class="prog-day-header">
-                <div>
-                  <div class="prog-day-title">Mercredi 29 Avril</div>
-                  <div style="font-size:11px;color:var(--text3);">75 min</div>
-                </div>
-                <span class="tag tag-orange">2 tâches</span>
-              </div>
-              <div class="prog-task"><div class="dot" style="background:var(--orange)"></div>Géométrie — Coniques<span class="dur">45 min</span></div>
-              <div class="prog-task"><div class="dot" style="background:var(--pink)"></div>Atelier d'écriture — Synthèse<span class="dur">30 min</span></div>
-            </div>
-          </div>
-          <div>
-            <div class="card mb-2">
-              <h3>Méthode recommandée</h3>
-              <div style="display:flex;flex-direction:column;gap:.8rem;">
-                <div style="display:flex;gap:.8rem;align-items:flex-start;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:var(--blue-l);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;">1</div>
-                  <div><div style="font-size:13px;font-weight:700;">Lire la fiche de révision</div><div style="font-size:12px;color:var(--text3);">10–15 min — Mémorisation active</div></div>
-                </div>
-                <div style="display:flex;gap:.8rem;align-items:flex-start;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:var(--green-l);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;">2</div>
-                  <div><div style="font-size:13px;font-weight:700;">Traiter les exercices</div><div style="font-size:12px;color:var(--text3);">15–20 min — Application</div></div>
-                </div>
-                <div style="display:flex;gap:.8rem;align-items:flex-start;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:var(--yellow-l);color:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;">3</div>
-                  <div><div style="font-size:13px;font-weight:700;">Discussion avec l'IA</div><div style="font-size:12px;color:var(--text3);">5–10 min — Clarification des doutes</div></div>
-                </div>
-                <div style="display:flex;gap:.8rem;align-items:flex-start;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:var(--red-l);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;">4</div>
-                  <div><div style="font-size:13px;font-weight:700;">Pause et répétition espacée</div><div style="font-size:12px;color:var(--text3);">Méthode Pomodoro : 25/5 min</div></div>
-                </div>
-              </div>
-            </div>
-            <div class="card" style="background:linear-gradient(135deg,var(--green-l),var(--blue-l));border-color:var(--green-m);">
-              <div style="font-size:1.8rem;margin-bottom:.5rem;">🎯</div>
-              <div style="font-family:var(--font-display);font-size:16px;font-weight:900;margin-bottom:.3rem;">Priorité : Chimie</div>
-              <div style="font-size:13px;color:var(--text2);">Matière la plus fragile (44%). Le KSA recommande 25 min supplémentaires chaque jour cette semaine.</div>
-              <div style="margin-top:1rem;">
-                <div class="flex justify-between mb-1"><span style="font-size:12px;font-weight:700;">Objectif hebdo</span><span style="font-size:12px;color:var(--text3);">+15%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:30%;background:var(--red)"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- DISCUSSION IA -->
-      <div id="section-discussion" class="section">
-        <div class="page-header">
-          <h2>Discussion IA 💬</h2>
-          <p>Pose toutes tes questions — ton assistant connaît ton programme Ingé1</p>
-        </div>
-        <div class="card" style="padding:1.2rem;">
-          <div class="chat-wrap">
-            <div class="chat-messages" id="chat-messages">
-              <div class="msg ai">
-                <div class="msg-av">🤖</div>
-                <div class="msg-bubble" id="chat-welcome-msg">Bonjour ! 👋 Je suis ton assistant KSA. Je connais tout ton programme Ingé1 de Kingsley : Algorithmique, Électromagnétisme, Analyse II, Géométrie, IDFOT, Atelier d'écriture, Réflexion humaine, Chimie et Anglais A2.<br><br>Pose-moi n'importe quelle question sur tes cours ! 😊</div>
-              </div>
-            </div>
-            <div class="typing-indicator" id="typing">
-              <div class="msg-av" style="background:linear-gradient(135deg,var(--blue),var(--purple));color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">🤖</div>
-              <div style="display:flex;gap:4px;align-items:center;background:white;border:1.5px solid var(--border);padding:.5rem .8rem;border-radius:var(--radius);box-shadow:var(--shadow-sm);">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-              </div>
-            </div>
-            <div class="chat-input-wrap">
-              <textarea class="chat-input" id="chat-input" rows="1" placeholder="Pose ta question... ex: Explique-moi la loi de Gauss" onkeydown="chatKeydown(event)"></textarea>
-              <button class="btn btn-blue" onclick="sendChat()">Envoyer</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- PROFIL / PERSONNALISER -->
-      <div id="section-profil" class="section">
-        <div class="page-header">
-          <h2>Personnaliser ⚙️</h2>
-          <p>Adapte l'interface à tes préférences</p>
-        </div>
-        <div class="grid-2">
-          <div>
-            <div class="card mb-2">
-              <h3>Mon profil</h3>
-              <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;">
-                <div class="avatar avatar-blue avatar-lg" id="profil-avatar">?</div>
-                <div>
-                  <div style="font-weight:800;font-size:15px;" id="profil-nom">—</div>
-                  <div style="font-size:12px;color:var(--text3);" id="profil-email">—</div>
-                  <div style="font-size:12px;color:var(--text3);">Ingé1 — Kingsley School</div>
-                </div>
-              </div>
-              <div class="form-group"><label>Prénom</label><input type="text" id="profil-input-prenom"></div>
-              <div class="form-group"><label>Nom</label><input type="text" id="profil-input-nom"></div>
-              <div class="form-group"><label>Email</label><input type="email" id="profil-input-email"></div>
-              <button class="btn btn-blue btn-sm" onclick="toast('Profil mis à jour !')">Sauvegarder</button>
-            </div>
-            <div class="card">
-              <h3>Matières difficiles</h3>
-              <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;">Indique tes matières les plus difficiles pour que l'IA adapte ton programme.</p>
-              <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="difficulty-tags">
-                <div class="tag tag-red" style="cursor:pointer;padding:6px 12px;">🟡 Chimie ✓</div>
-                <div class="tag tag-purple" style="cursor:pointer;padding:6px 12px;">🟣 Électromagnétisme ✓</div>
-                <div class="tag tag-blue" style="cursor:pointer;padding:6px 12px;background:var(--bg2);color:var(--text3);">🔵 Algorithmique</div>
-                <div class="tag tag-blue" style="cursor:pointer;padding:6px 12px;background:var(--bg2);color:var(--text3);">🟢 Analyse II</div>
-                <div class="tag tag-blue" style="cursor:pointer;padding:6px 12px;background:var(--bg2);color:var(--text3);">🟠 Géométrie</div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="card mb-2">
-              <h3>Couleur d'accentuation</h3>
-              <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;">Choisis ta couleur principale</p>
-              <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
-                <div class="theme-swatch selected" style="background:var(--blue);" onclick="setAccent('#3b82f6','#eff6ff','#bfdbfe')" title="Bleu"></div>
-                <div class="theme-swatch" style="background:var(--green);" onclick="setAccent('#10b981','#ecfdf5','#a7f3d0')" title="Vert"></div>
-                <div class="theme-swatch" style="background:var(--purple);" onclick="setAccent('#8b5cf6','#f5f3ff','#ddd6fe')" title="Violet"></div>
-                <div class="theme-swatch" style="background:var(--pink);" onclick="setAccent('#ec4899','#fdf2f8','#fbcfe8')" title="Rose"></div>
-                <div class="theme-swatch" style="background:var(--orange);" onclick="setAccent('#f97316','#fff7ed','#fed7aa')" title="Orange"></div>
-                <div class="theme-swatch" style="background:var(--red);" onclick="setAccent('#ef4444','#fef2f2','#fecaca')" title="Rouge"></div>
-                <div class="theme-swatch" style="background:var(--teal);" onclick="setAccent('#14b8a6','#f0fdfa','#99f6e4')" title="Sarcelle"></div>
-              </div>
-            </div>
-            <div class="card mb-2">
-              <h3>Préférences d'étude</h3>
-              <div class="setting-row">
-                <div><div class="setting-label">Rappels quotidiens</div><div class="setting-desc">Rappels pour soumettre les cours du jour</div></div>
-                <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-              </div>
-              <div class="setting-row">
-                <div><div class="setting-label">Notifications d'exercices</div><div class="setting-desc">Alertes pour de nouveaux exercices</div></div>
-                <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-              </div>
-              <div class="setting-row">
-                <div><div class="setting-label">Mode Pomodoro</div><div class="setting-desc">Timer 25/5 min intégré</div></div>
-                <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
-              </div>
-              <div class="setting-row">
-                <div><div class="setting-label">Statistiques détaillées</div><div class="setting-desc">Graphiques avancés de progression</div></div>
-                <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-              </div>
-            </div>
-            <div class="card">
-              <h3>Langue de l'IA</h3>
-              <div class="form-group" style="margin:0;">
-                <select>
-                  <option>Français 🇫🇷</option>
-                  <option>English 🇬🇧</option>
-                  <option>Français + English (bilingue)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-<!-- =========== ADMIN =========== -->
-<div id="page-admin" class="page">
-  <div class="app-layout">
-    <aside class="sidebar">
-      <div class="sidebar-top">
-        <div class="sidebar-brand"><span class="k">K</span><span class="s">S</span><span class="a">A</span></div>
-        <div class="sidebar-sub">Espace Administrateur</div>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">Tableau de bord</div>
-        <div class="nav-item active" onclick="showAdminSection('admin-overview')">
-          <span class="icon">◉</span> Vue d'ensemble
-        </div>
-        <div class="nav-section">Gestion</div>
-        <div class="nav-item" onclick="showAdminSection('admin-users')">
-          <span class="icon">👤</span> Comptes étudiants
-        </div>
-        <div class="nav-item" onclick="showAdminSection('admin-matieres')">
-          <span class="icon">📚</span> Matières & Programme
-        </div>
-        <div class="nav-item" onclick="showAdminSection('admin-stats')">
-          <span class="icon">📊</span> Statistiques
-        </div>
-        <div class="nav-section">Configuration</div>
-        <div class="nav-item" onclick="showAdminSection('admin-settings')">
-          <span class="icon">⚙️</span> Paramètres site
-        </div>
-        <div class="nav-item" style="color:rgba(255,100,100,.8);" onclick="showPage('landing')">
-          <span class="icon">↩</span> Déconnexion
-        </div>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="user-chip">
-          <div class="avatar avatar-blue">AD</div>
-          <div class="user-info">
-            <div class="name">Administrateur</div>
-            <div class="role">Kingsley School</div>
-          </div>
-        </div>
-      </div>
-    </aside>
-    <main class="main-content">
-      <!-- OVERVIEW -->
-      <div id="admin-section-admin-overview" class="admin-section active-section">
-        <div class="page-header">
-          <h2>Vue d'ensemble 📊</h2>
-          <p>Tableau de bord administrateur — KSA Kingsley</p>
-        </div>
-        <div class="grid-4 mb-2x">
-          <div class="admin-stat">
-            <div class="stat-label">Étudiants inscrits</div>
-            <div class="stat-val" id="admin-stat-users" style="color:var(--blue);">—</div>
-            <div class="stat-sub" id="admin-stat-users-sub">chargement...</div>
-          </div>
-          <div class="admin-stat">
-            <div class="stat-label">Fiches générées</div>
-            <div class="stat-val" id="admin-stat-fiches" style="color:var(--green);">—</div>
-            <div class="stat-sub">ce semestre</div>
-          </div>
-          <div class="admin-stat">
-            <div class="stat-label">Exercices traités</div>
-            <div class="stat-val" id="admin-stat-exercices" style="color:var(--purple);">—</div>
-            <div class="stat-sub" id="admin-stat-ex-sub">chargement...</div>
-          </div>
-          <div class="admin-stat">
-            <div class="stat-label">Connexions aujourd'hui</div>
-            <div class="stat-val" id="admin-stat-connexions" style="color:var(--orange);">—</div>
-            <div class="stat-sub" id="admin-stat-co-sub">chargement...</div>
-          </div>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>Activité récente</h3>
-            <div id="admin-activity-list" style="display:flex;flex-direction:column;gap:.6rem;"><div class="empty-state"><div class="ei">🕐</div><p>Chargement de l'activité...</p></div></div>
-          </div>
-          <div class="card">
-            <h3>Matières les plus difficiles</h3>
-            <p style="font-size:12px;color:var(--text3);margin-bottom:1rem;">Basé sur les taux de réussite aux exercices</p>
-            <div id="admin-matieres-difficulty" style="display:flex;flex-direction:column;gap:.8rem;"><div class="empty-state"><div class="ei">📊</div><p>Chargement des statistiques...</p></div></div>
-          </div>
-        </div>
-      </div>
-      <!-- USERS -->
-      <div id="admin-section-admin-users" class="admin-section">
-        <div class="page-header">
-          <div class="section-row" style="margin-bottom:0;">
-            <div><h2>Comptes étudiants 👤</h2><p id="admin-users-count">Chargement...</p></div>
-            <button class="btn btn-blue btn-sm" onclick="toast('Invitation envoyée !')">+ Inviter un étudiant</button>
-          </div>
-        </div>
-        <div class="card" style="padding:0;overflow:hidden;">
-          <div style="padding:1rem 1.2rem;border-bottom:1.5px solid var(--border);display:flex;gap:.8rem;">
-            <input type="text" placeholder="🔍 Rechercher un étudiant..." style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-family:var(--font-body);font-size:13px;color:var(--text);flex:1;">
-            <select style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-family:var(--font-body);font-size:13px;color:var(--text);">
-              <option>Tous les statuts</option>
-              <option>Actifs</option>
-              <option>Inactifs</option>
+            <label class="admin-label">Rubrique *</label>
+            <select class="admin-select" id="f-rubrique">
+              <option value="">-- Choisir --</option>
+              <option value="cours">Cours & Projets</option>
+              <option value="vie">Vie de classe</option>
+              <option value="talents">Talents</option>
+              <option value="sport">Sports & Loisirs</option>
+              <option value="philo">Réflexion Humaine</option>
             </select>
           </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Étudiant</th>
-                <th>N° Étudiant</th>
-                <th>Statut</th>
-                <th>Fiches</th>
-                <th>Dernière connexion</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-users-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">Chargement...</td></tr></tbody>
-          </table>
+        </div>
+        <div style="margin-top:14px">
+          <label class="admin-label">Accroche (kicker)</label>
+          <input class="admin-input" id="f-kicker" placeholder="ex: Mécatronique · À la une">
+        </div>
+        <div style="margin-top:14px">
+          <label class="admin-label">Résumé (extrait)</label>
+          <input class="admin-input" id="f-excerpt" placeholder="Une phrase d'accroche pour la carte">
+        </div>
+        <div style="margin-top:14px">
+          <label class="admin-label">Corps de l'article * (HTML autorisé)</label>
+          <textarea class="admin-textarea" id="f-body" placeholder="<p>Contenu de l'article...</p>&#10;<blockquote>Citation...</blockquote>&#10;<p>Suite..."></textarea>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div>
+            <label class="admin-label">Emoji de couverture</label>
+            <div class="emoji-picker" id="emoji-picker">
+              <span class="emoji-opt selected" data-emoji="📰" onclick="selectEmoji(this)">📰</span>
+              <span class="emoji-opt" data-emoji="🔧" onclick="selectEmoji(this)">🔧</span>
+              <span class="emoji-opt" data-emoji="📐" onclick="selectEmoji(this)">📐</span>
+              <span class="emoji-opt" data-emoji="📜" onclick="selectEmoji(this)">📜</span>
+              <span class="emoji-opt" data-emoji="✍️" onclick="selectEmoji(this)">✍️</span>
+              <span class="emoji-opt" data-emoji="⚽" onclick="selectEmoji(this)">⚽</span>
+              <span class="emoji-opt" data-emoji="💻" onclick="selectEmoji(this)">💻</span>
+              <span class="emoji-opt" data-emoji="🎓" onclick="selectEmoji(this)">🎓</span>
+              <span class="emoji-opt" data-emoji="🏆" onclick="selectEmoji(this)">🏆</span>
+              <span class="emoji-opt" data-emoji="😰" onclick="selectEmoji(this)">😰</span>
+              <span class="emoji-opt" data-emoji="🔬" onclick="selectEmoji(this)">🔬</span>
+              <span class="emoji-opt" data-emoji="🎯" onclick="selectEmoji(this)">🎯</span>
+            </div>
+          </div>
+          <div>
+            <label class="admin-label">Couleur de fond</label>
+            <input type="color" class="admin-input" id="f-color" value="#1A2E6E" style="height:42px;padding:4px 8px;cursor:pointer">
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
+          <button class="btn-admin primary" onclick="saveArticle('published')">Publier</button>
+          <button class="btn-admin secondary" onclick="saveArticle('draft')">Enregistrer en brouillon</button>
+          <button class="btn-admin secondary" onclick="resetArticleForm()">Annuler</button>
         </div>
       </div>
-      <!-- MATIÈRES -->
-      <div id="admin-section-admin-matieres" class="admin-section">
-        <div class="page-header">
-          <h2>Matières & Programme 📚</h2>
-          <p>Gestion du programme Ingé1 — Kingsley School</p>
-        </div>
-        <div class="grid-3">
-          <div class="card" style="border-top:4px solid var(--blue);">
-            <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Algorithmique</h3><span class="tag tag-blue">Actif</span></div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 3 · 4h/semaine</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
-            <div style="font-size:12px;color:var(--text2);">M. Nkodo Pierre</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
+    </div>
+
+    <!-- AGENDA ADMIN -->
+    <div class="admin-section" id="sec-agenda">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:#fff;margin-bottom:20px">Gestion de l'agenda</div>
+      <div class="admin-card">
+        <h3>Ajouter un événement</h3>
+        <div class="form-row">
+          <div>
+            <label class="admin-label">Titre *</label>
+            <input class="admin-input" id="ev-title" placeholder="Titre de l'événement">
           </div>
-          <div class="card" style="border-top:4px solid var(--purple);">
-            <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Électromagnétisme</h3><span class="tag tag-purple">Actif</span></div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 4 · 3h/semaine</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
-            <div style="font-size:12px;color:var(--text2);">Mme Atangana Sophie</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
-          </div>
-          <div class="card" style="border-top:4px solid var(--green);">
-            <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Analyse II</h3><span class="tag tag-green">Actif</span></div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 4 · 4h/semaine</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
-            <div style="font-size:12px;color:var(--text2);">M. Fouda Jean-Baptiste</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
-          </div>
-          <div class="card" style="border-top:4px solid var(--orange);">
-            <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Géométrie</h3><span class="tag tag-orange">Actif</span></div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 3 · 3h/semaine</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
-            <div style="font-size:12px;color:var(--text2);">M. Fouda Jean-Baptiste</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
-          </div>
-          <div class="card" style="border-top:4px solid var(--teal);">
-            <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">IDFOT</h3><span class="tag" style="background:var(--teal-l);color:var(--teal);">Actif</span></div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 2 · 2h/semaine</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
-            <div style="font-size:12px;color:var(--text2);">M. Bebey Thomas</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
-          </div>
-          <div class="card" style="border-top:4px solid var(--red);">
-            <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Chimie</h3><span class="tag tag-red">Actif</span></div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 3 · 3h/semaine</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
-            <div style="font-size:12px;color:var(--text2);">Mme Owona Claire</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
+          <div>
+            <label class="admin-label">Date *</label>
+            <input type="date" class="admin-input" id="ev-date">
           </div>
         </div>
+        <div style="margin-top:14px">
+          <label class="admin-label">Description</label>
+          <input class="admin-input" id="ev-desc" placeholder="Salle, heure, détails…">
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <div>
+            <label class="admin-label">Étiquette</label>
+            <input class="admin-input" id="ev-tag" placeholder="Examen, Rendu, Événement…">
+          </div>
+          <div>
+            <label class="admin-label">Couleur étiquette</label>
+            <input type="color" class="admin-input" id="ev-color" value="#1A2E6E" style="height:42px;padding:4px 8px;cursor:pointer">
+          </div>
+        </div>
+        <button class="btn-admin primary" style="margin-top:16px" onclick="addEvent()">Ajouter l'événement</button>
       </div>
-      <!-- STATS ADMIN -->
-      <div id="admin-section-admin-stats" class="admin-section">
-        <div class="page-header">
-          <h2>Statistiques globales 📊</h2>
-          <p>Analyse de l'utilisation de la plateforme</p>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>Progression moyenne par matière</h3>
-            <div id="admin-stats-progression" style="display:flex;flex-direction:column;gap:.9rem;margin-top:.5rem;"><div class="empty-state"><div class="ei">📊</div><p>Chargement...</p></div></div>
-          </div>
-          <div class="card">
-            <h3>Résumé d'utilisation</h3>
-            <div class="grid-2" style="gap:.8rem;margin-top:.5rem;">
-              <div class="stat-card" style="background:var(--blue-l);border-color:var(--blue-m);"><div class="stat-label">Connexions/jour</div><div class="stat-val" id="admin-co-jour" style="color:var(--blue);">—</div></div>
-              <div class="stat-card" style="background:var(--green-l);border-color:var(--green-m);"><div class="stat-label">Fiches/semaine</div><div class="stat-val" id="admin-fiches-sem" style="color:var(--green);">—</div></div>
-              <div class="stat-card" style="background:var(--purple-l);border-color:var(--purple-m);"><div class="stat-label">Exercices/jour</div><div class="stat-val" id="admin-ex-jour" style="color:var(--purple);">—</div></div>
-              <div class="stat-card" style="background:var(--orange-l);border-color:var(--orange-m);"><div class="stat-label">Étudiants actifs</div><div class="stat-val" id="admin-actifs" style="color:var(--orange);">—</div></div>
-            </div>
-          </div>
-        </div>
+      <div class="admin-card">
+        <h3>Événements actuels</h3>
+        <div id="agenda-admin-list"></div>
       </div>
-      <!-- SETTINGS ADMIN -->
-      <div id="admin-section-admin-settings" class="admin-section">
-        <div class="page-header">
-          <h2>Paramètres du site ⚙️</h2>
-          <p>Configuration générale de la plateforme KSA</p>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>Informations générales</h3>
-            <div class="form-group"><label>Nom de la plateforme</label><input type="text" value="Kingsley School Assistant"></div>
-            <div class="form-group"><label>Établissement</label><input type="text" value="Kingsley School — Yaoundé"></div>
-            <div class="form-group"><label>Année académique</label><input type="text" value="2025–2026"></div>
-            <div class="form-group"><label>Niveau</label><input type="text" value="Ingé1 (1ère année Ingénierie)"></div>
-            <button class="btn btn-blue btn-sm" onclick="toast('Paramètres sauvegardés !')">Sauvegarder</button>
-          </div>
-          <div class="card">
-            <h3>Paramètres IA</h3>
-            <div class="setting-row">
-              <div><div class="setting-label">Génération de fiches activée</div><div class="setting-desc">Permettre aux étudiants de générer des fiches</div></div>
-              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-            </div>
-            <div class="setting-row">
-              <div><div class="setting-label">Discussion IA activée</div><div class="setting-desc">Chat intelligent disponible pour les étudiants</div></div>
-              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-            </div>
-            <div class="setting-row">
-              <div><div class="setting-label">Nouvelles inscriptions</div><div class="setting-desc">Autoriser les nouvelles créations de compte</div></div>
-              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-            </div>
-            <div class="setting-row">
-              <div><div class="setting-label">Mode maintenance</div><div class="setting-desc">Désactiver l'accès étudiant temporairement</div></div>
-              <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
-            </div>
-          </div>
-        </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="admin-section" id="sec-users">
+      <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:#fff;margin-bottom:20px">Membres inscrits</div>
+      <div class="admin-card" style="padding:0;overflow:hidden">
+        <table class="users-table">
+          <thead><tr>
+            <th>Nom</th><th>Email</th><th>Rôle</th><th>Inscription</th><th>Action</th>
+          </tr></thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
       </div>
-    </main>
+    </div>
+
   </div>
 </div>
+
+<!-- ═══════════════════════════════════ SITE ══ -->
+
+<header>
+  <div class="header-top">
+    <div class="header-meta">VOL. 1 — Nº 4 — AVRIL 2026</div>
+    <a href="#" class="logo">ING1B<em>Mag</em><sup>ISJ</sup></a>
+    <div class="header-right">
+      <span class="badge-school">Institut Saint Jean</span>
+      <div id="auth-area">
+        <button class="icon-btn" onclick="openAuth()" title="Se connecter">👤</button>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <a class="active" onclick="filterRubrique(null,this)">Accueil</a>
+    <a onclick="filterRubrique('cours',this)">Cours & Projets</a>
+    <a onclick="filterRubrique('vie',this)">Vie de classe</a>
+    <a onclick="filterRubrique('talents',this)">Talents</a>
+    <a onclick="filterRubrique('sport',this)">Sports & Loisirs</a>
+    <a onclick="scrollTo(0,document.getElementById('agenda-section').offsetTop-80)">Agenda</a>
+    <a onclick="scrollTo(0,document.getElementById('equipe-section').offsetTop-80)">Équipe</a>
+  </nav>
+</header>
+
+<div class="ticker">
+  <div class="ticker-label">Flash info</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">📌 Partiels d'Algèbre linéaire : le 12 avril, Salle B2</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">🏆 Tournoi inter-promos de foot : ING1B en demi-finale !</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">📢 Soutenances du projet Thermostat Autonome : 18 avril</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">🎓 Stage académique 2026 : les candidatures sont ouvertes</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">🎉 Soirée de promo ING1B : 25 avril au campus Saint Jean</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">📌 Partiels d'Algèbre linéaire : le 12 avril, Salle B2</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">🏆 Tournoi inter-promos de foot : ING1B en demi-finale !</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">📢 Soutenances du projet Thermostat Autonome : 18 avril</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">🎓 Stage académique 2026 : les candidatures sont ouvertes</span>
+      <span class="ticker-item">◆</span>
+      <span class="ticker-item">🎉 Soirée de promo ING1B : 25 avril au campus Saint Jean</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero fade-in" id="hero-section">
+    <div class="hero-main">
+      <div class="hero-kicker" id="hero-kicker">Chargement…</div>
+      <h1 id="hero-title">ING1B Magazine</h1>
+      <p class="hero-excerpt" id="hero-excerpt">Le magazine de la promotion ING1B à l'Institut Saint Jean Ingénieur de Yaoundé.</p>
+      <div class="hero-footer">
+        <div class="author-chip-sm">
+          <div class="avatar-sm" id="hero-avatar" style="background:var(--bleu)">IB</div>
+          <div>
+            <div style="font-weight:600;font-size:13px" id="hero-author">Équipe éditoriale</div>
+            <div style="font-size:12px;color:var(--gris)" id="hero-date">Avril 2026</div>
+          </div>
+        </div>
+        <button class="read-btn" id="hero-read-btn">Lire l'article →</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="hero-img" id="hero-img">
+        <div id="hero-emoji" style="font-size:56px;z-index:1">📰</div>
+        <div class="img-label" id="hero-label">À la une</div>
+      </div>
+      <div id="hero-secondary"></div>
+    </div>
+  </section>
+
+  <!-- ARTICLES GRID -->
+  <section id="articles-section">
+    <div class="section-header fade-in">
+      <div class="section-title"><span class="dot" id="grid-dot" style="background:var(--or)"></span><span id="grid-title">Articles récents</span></div>
+    </div>
+    <div class="cards-grid" id="articles-grid">
+      <div class="loading" style="grid-column:1/-1"><div class="spinner"></div><span>Chargement…</span></div>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <div class="featured-strip fade-in">
+    <div class="featured-img"><span style="z-index:1">💻</span></div>
+    <div class="featured-content">
+      <div class="featured-kicker">Coup de projecteur · Talents</div>
+      <div class="featured-title">Les développeurs cachés d'ING1B</div>
+      <p class="featured-excerpt">Jeux en 3D, applications mobiles, sites web… certains de nos camarades codent bien au-delà des cours.</p>
+      <button class="read-btn" onclick="filterRubrique('talents',null)">Découvrir leurs projets →</button>
+    </div>
+  </div>
+
+  <!-- AGENDA + POLL -->
+  <div class="two-col" id="agenda-section">
+    <div class="fade-in">
+      <div class="section-header">
+        <div class="section-title"><span class="dot" style="background:var(--bleu)"></span>Agenda ING1B</div>
+      </div>
+      <div class="agenda-list" id="agenda-list">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="section-header">
+        <div class="section-title"><span class="dot" style="background:var(--rouge)"></span>Sondage</div>
+      </div>
+      <div class="poll-box">
+        <div class="poll-question">Le cours le plus redouté d'ING1B ?</div>
+        <div id="poll-options"><div class="loading"><div class="spinner"></div></div></div>
+        <div class="poll-total" id="poll-total">Chargement…</div>
+        <div class="poll-login-note" id="poll-login-note" onclick="openAuth()" style="display:none">Connecte-toi pour voter</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉQUIPE -->
+  <section id="equipe-section">
+    <div class="section-header fade-in">
+      <div class="section-title"><span class="dot" style="background:var(--rouge)"></span>L'équipe éditoriale</div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade-in"><div class="team-avatar-lg" style="background:var(--bleu)">AG</div><div class="team-name">Adrien Guipelbe</div><div class="team-role">Rédacteur en chef</div></div>
+      <div class="team-card fade-in"><div class="team-avatar-lg" style="background:var(--rouge)">MK</div><div class="team-name">Marie Kamga</div><div class="team-role">Cours & Projets</div></div>
+      <div class="team-card fade-in"><div class="team-avatar-lg" style="background:var(--or);color:var(--noir)">SO</div><div class="team-name">Samuel Ongolo</div><div class="team-role">Sports & Loisirs</div></div>
+      <div class="team-card fade-in"><div class="team-avatar-lg" style="background:var(--cyan);color:var(--noir)">JN</div><div class="team-name">Jean-Paul Nkomo</div><div class="team-role">Vie de classe</div></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-top">
+    <div><div class="footer-logo">ING1B<span>Mag</span></div><p class="footer-desc">Le magazine officieux de la promotion ING1B à l'Institut Saint Jean Ingénieur de Yaoundé. Fait par les étudiants, pour les étudiants.</p></div>
+    <div class="footer-col"><h4>Rubriques</h4><ul><li><a href="#">Cours & Projets</a></li><li><a href="#">Vie de classe</a></li><li><a href="#">Talents</a></li><li><a href="#">Sports & Loisirs</a></li></ul></div>
+    <div class="footer-col"><h4>Magazine</h4><ul><li><a href="#">À propos</a></li><li><a href="#" onclick="openAuth()">Publier un article</a></li><li><a href="#">Archives</a></li></ul></div>
+    <div class="footer-col"><h4>École</h4><ul><li><a href="#">Institut Saint Jean</a></li><li><a href="#">Agenda officiel</a></li><li><a href="#">Espace étudiant</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 ING1B Mag — Institut Universitaire Saint Jean Ingénieur, Yaoundé</span><span>VOL. 1 — Nº 4 — AVRIL 2026</span></div>
+</footer>
+
 <script>
-// ===== CONFIG =====
-const API_URL = "https://ksa-backend.vercel.app/api";
-let authToken = localStorage.getItem('ksa_token') || null;
-let currentUser = JSON.parse(localStorage.getItem('ksa_user') || 'null');
+/* ════════════════════════════════════════════════
+   CONFIG — Change l'URL quand tu déploies sur Render
+   ════════════════════════════════════════════════ */
+const API = 'https://ing1b-mag-backend.onrender.com/api';
+const GOOGLE_CLIENT_ID = 'COLLE_TON_GOOGLE_CLIENT_ID_ICI.apps.googleusercontent.com';
 
-// ===== HISTORY API - bouton retour navigateur =====
-function showPage(p) {
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.getElementById('page-' + p).classList.add('active');
-  window.scrollTo(0, 0);
-  history.pushState({ page: p }, '', '#' + p);
+/* ── STATE ── */
+let currentUser = null;
+let currentToken = null;
+let allArticles = [];
+let pollVoted = null;
+
+/* ════════════════════════════════════════════════
+   UTILS
+   ════════════════════════════════════════════════ */
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
 }
 
-window.addEventListener('popstate', function(e) {
-  const page = e.state?.page || 'landing';
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  window.scrollTo(0, 0);
-});
-
-// Init history state
-window.addEventListener('load', function() {
-  history.replaceState({ page: 'landing' }, '', '#landing');
-  // Auto-reconnect si token valide
-  if (authToken && currentUser) {
-    applyUserPreferences();
-    updateUserUI();
-  }
-});
-
-// ===== SCROLL to landing sections =====
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
-}
-
-// ===== API HELPER =====
-function apiHeaders(isJson = true) {
-  const h = { 'Authorization': `Bearer ${authToken}` };
-  if (isJson) h['Content-Type'] = 'application/json';
-  return h;
-}
-async function api(method, endpoint, body = null, isFormData = false) {
-  const opts = { method, headers: apiHeaders(!isFormData) };
-  if (body) opts.body = isFormData ? body : JSON.stringify(body);
-  const res = await fetch(API_URL + endpoint, opts);
+async function apiFetch(path, opts={}) {
+  const headers = { 'Content-Type': 'application/json', ...(opts.headers||{}) };
+  if (currentToken) headers['Authorization'] = 'Bearer ' + currentToken;
+  const res = await fetch(API + path, { ...opts, headers });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Erreur serveur');
   return data;
 }
 
-// ===== AUTH =====
-async function loginUser() {
-  const emailEl = document.getElementById('login-email');
-  const passEl = document.getElementById('login-pass');
-  if (!emailEl || !passEl) return;
-  const email = emailEl.value.trim();
-  const pass = passEl.value;
-  if (!email || !pass) { toast('Email et mot de passe requis'); return; }
-  try {
-    const data = await api('POST', '/auth/login', { email, password: pass });
-    authToken = data.token; currentUser = data.user;
-    localStorage.setItem('ksa_token', authToken);
-    localStorage.setItem('ksa_user', JSON.stringify(currentUser));
-    applyUserPreferences();
-    updateUserUI();
-    if (currentUser.role === 'admin') {
-      showPage('admin');
-      showAdminSection('admin-overview');
-      loadAdminData();
-    } else {
-      showPage('app');
-      showSection('dashboard');
-      loadDashboard();
-    }
-    toast('Bienvenue ' + currentUser.prenom + ' ! 👋');
-  } catch (err) { toast('❌ ' + err.message); }
+function initials(name) {
+  return name ? name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '??';
 }
 
-async function registerUser() {
-  const prenom = document.getElementById('reg-prenom')?.value?.trim();
-  const nom = document.getElementById('reg-nom')?.value?.trim();
-  const email = document.getElementById('reg-email')?.value?.trim();
-  const pass = document.getElementById('reg-pass')?.value;
-  if (!prenom || !nom || !email || !pass) { toast('Remplis tous les champs !'); return; }
-  try {
-    const data = await api('POST', '/auth/register', { prenom, nom, email, password: pass });
-    authToken = data.token; currentUser = data.user;
-    localStorage.setItem('ksa_token', authToken);
-    localStorage.setItem('ksa_user', JSON.stringify(currentUser));
-    applyUserPreferences();
-    updateUserUI();
-    showPage('app'); showSection('dashboard'); loadDashboard();
-    toast('Compte créé ! Bienvenue ' + prenom + ' 🎓');
-  } catch (err) { toast('❌ ' + err.message); }
+function formatDate(str) {
+  if (!str) return '';
+  return new Date(str).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
 }
 
-// ===== ADMIN LOGIN MODAL =====
-function showAdminLoginModal() {
-  // If already have credentials in login form, use them
-  const emailEl = document.getElementById('login-email');
-  const passEl = document.getElementById('login-pass');
-  if (emailEl?.value && passEl?.value) { loginUser(); return; }
-  // Show modal
-  let modal = document.getElementById('admin-modal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'admin-modal';
-    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
-    modal.innerHTML = `
-      <div style="background:white;border-radius:var(--radius-xl);padding:2.5rem;width:100%;max-width:400px;box-shadow:var(--shadow-lg);">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;margin-bottom:1.5rem;text-align:center;">🔐 Connexion Administrateur</div>
-        <div class="form-group"><label>Email admin</label><input type="email" id="adm-email" placeholder="admin@kingsley.edu"></div>
-        <div class="form-group"><label>Mot de passe</label><input type="password" id="adm-pass" placeholder="••••••••"></div>
-        <div style="display:flex;gap:.8rem;margin-top:1rem;">
-          <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('admin-modal').remove()">Annuler</button>
-          <button class="btn btn-blue" style="flex:1;" onclick="loginAsAdmin()">Se connecter</button>
-        </div>
-      </div>`;
-    document.body.appendChild(modal);
-  }
-  document.getElementById('admin-modal').style.display = 'flex';
-}
-
-async function loginAsAdmin() {
-  const email = document.getElementById('adm-email')?.value?.trim();
-  const pass = document.getElementById('adm-pass')?.value;
-  if (!email || !pass) { toast('Email et mot de passe requis'); return; }
-  try {
-    const data = await api('POST', '/auth/login-admin', { email, password: pass });
-    authToken = data.token; currentUser = data.user;
-    localStorage.setItem('ksa_token', authToken);
-    localStorage.setItem('ksa_user', JSON.stringify(currentUser));
-    document.getElementById('admin-modal')?.remove();
-    showPage('admin'); showAdminSection('admin-overview'); loadAdminData();
-    toast('Bienvenue Administrateur 👑');
-  } catch (err) { toast('❌ ' + err.message); }
-}
-
-function deconnexion() {
-  authToken = null; currentUser = null;
-  localStorage.removeItem('ksa_token'); localStorage.removeItem('ksa_user');
-  showPage('landing'); toast('Déconnecté 👋');
-}
-
-// ===== USER UI =====
-function updateUserUI() {
-  if (!currentUser) return;
-  const initiales = (currentUser.prenom?.[0] || '') + (currentUser.nom?.[0] || '');
-  const nom = currentUser.prenom + ' ' + (currentUser.nom?.[0] || '') + '.';
-  const el = (id) => document.getElementById(id);
-  if (el('sidebar-avatar')) el('sidebar-avatar').textContent = initiales;
-  if (el('sidebar-name')) el('sidebar-name').textContent = nom;
-  if (el('profil-avatar')) el('profil-avatar').textContent = initiales;
-  if (el('profil-nom')) el('profil-nom').textContent = currentUser.prenom + ' ' + (currentUser.nom || '');
-  if (el('profil-email')) el('profil-email').textContent = currentUser.email;
-  if (el('profil-input-prenom')) el('profil-input-prenom').value = currentUser.prenom || '';
-  if (el('profil-input-nom')) el('profil-input-nom').value = currentUser.nom || '';
-  if (el('profil-input-email')) el('profil-input-email').value = currentUser.email || '';
-  // Greeting
-  const greeting = el('dash-greeting');
-  if (greeting) greeting.textContent = 'Bonjour, ' + currentUser.prenom + ' 👋';
-  // Date
-  const dateEl = el('dash-date');
-  if (dateEl) {
-    const now = new Date();
-    const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-    const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-    dateEl.textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
-  }
-  // Chat welcome
-  const chatWelcome = el('chat-welcome-msg');
-  if (chatWelcome) {
-    chatWelcome.innerHTML = 'Bonjour ' + currentUser.prenom + ' ! 👋 Je suis ton assistant KSA. Je connais tout ton programme Ingé1 de Kingsley : Algorithmique, Électromagnétisme, Analyse II, Géométrie, IDFOT, Atelier d'écriture, Réflexion humaine, Chimie et Anglais A2.<br><br>Pose-moi n'importe quelle question sur tes cours ! 😊';
-  }
-  // Chat avatar
-  document.querySelectorAll('.msg.user .msg-av').forEach(av => { av.textContent = initiales; });
-}
-
-function applyUserPreferences() {
-  if (currentUser?.couleur_accent) {
-    document.documentElement.style.setProperty('--blue', currentUser.couleur_accent);
-  }
-}
-
-// ===== DASHBOARD DATA =====
-async function loadDashboard() {
-  updateUserUI();
-  if (!authToken) return;
-  try {
-    const data = await api('GET', '/progression/dashboard');
-    const el = (id) => document.getElementById(id);
-    if (el('stat-fiches')) el('stat-fiches').textContent = data.fiches_count ?? 0;
-    if (el('stat-exercices')) el('stat-exercices').textContent = data.exercices_count ?? 0;
-    if (el('stat-exercices-sub')) {
-      const pct = data.exercices_count > 0 ? Math.round((data.exercices_reussis / data.exercices_count) * 100) : 0;
-      el('stat-exercices-sub').textContent = 'succès ' + pct + '%';
-    }
-    if (el('stat-streak')) el('stat-streak').textContent = data.streak_jours ?? 0;
-    // Progression bars
-    if (data.progression && el('progression-bars')) {
-      const colors = {
-        'Algorithmique': 'var(--blue)', 'Électromagnétisme': 'var(--purple)',
-        'Analyse II': 'var(--green)', 'Géométrie': 'var(--orange)',
-        'IDFOT': 'var(--teal)', "Atelier d'écriture": 'var(--pink)',
-        'Réflexion humaine': 'var(--red)', 'Chimie': 'var(--yellow)', 'Anglais A2': '#06b6d4'
-      };
-      const emojis = {
-        'Algorithmique':'🔵','Électromagnétisme':'🟣','Analyse II':'🟢',
-        'Géométrie':'🟠','IDFOT':'🩵',"Atelier d'écriture":'🩷',
-        'Réflexion humaine':'🔴','Chimie':'🟡','Anglais A2':'🌐'
-      };
-      if (data.progression.length > 0) {
-        el('progression-bars').innerHTML = data.progression.map(p => {
-          const pct = p.score ?? 0;
-          const color = colors[p.matiere] || 'var(--blue)';
-          const emoji = emojis[p.matiere] || '📚';
-          return `<div>
-            <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">${emoji} ${p.matiere}</span><span style="font-size:12px;color:var(--text3);font-weight:700;">${pct}%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
-          </div>`;
-        }).join('');
-      } else {
-        el('progression-bars').innerHTML = '<div class="empty-state"><div class="ei">📊</div><p>Soumets tes premiers cours pour voir ta progression</p></div>';
-      }
-    }
-    // Programme du jour
-    if (data.programme_jour && el('tasks-list') && data.programme_jour.length > 0) {
-      el('tasks-list').innerHTML = data.programme_jour.map(t => `
-        <div class="task-item"><span>📖 ${t.matiere} — ${t.type_activite || 'Révision'}</span><span class="task-dur">${t.duree_minutes || 30} min</span></div>
-      `).join('');
-    }
-    // Prochaine révision
-    if (data.prochaine_revision && el('stat-revision')) {
-      el('stat-revision').textContent = 'Auj.';
-      if (el('stat-revision-sub')) el('stat-revision-sub').textContent = data.prochaine_revision;
-    }
-    // Conseil
-    if (data.matiere_faible && el('conseil-text')) {
-      el('conseil-text').textContent = data.matiere_faible + ' est ta matière la plus fragile. Consacre 20 min supplémentaires ce soir !';
-    }
-  } catch (e) {
-    console.log('Dashboard load error:', e);
-    // Affiche quand même les valeurs à 0 si erreur
-    ['stat-fiches','stat-exercices','stat-streak'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = '0';
-    });
-  }
-}
-
-// ===== ADMIN DATA =====
-async function loadAdminData() {
-  if (!authToken) return;
-  try {
-    const data = await api('GET', '/admin/stats');
-    const el = (id) => document.getElementById(id);
-    if (el('admin-stat-users')) el('admin-stat-users').textContent = data.total_users ?? 0;
-    if (el('admin-stat-users-sub')) el('admin-stat-users-sub').textContent = '↑ ' + (data.new_this_month ?? 0) + ' ce mois';
-    if (el('admin-stat-fiches')) el('admin-stat-fiches').textContent = data.total_fiches ?? 0;
-    if (el('admin-stat-exercices')) el('admin-stat-exercices').textContent = data.total_exercices ?? 0;
-    if (el('admin-stat-ex-sub')) el('admin-stat-ex-sub').textContent = 'succès moy. ' + (data.taux_reussite ?? 0) + '%';
-    if (el('admin-stat-connexions')) el('admin-stat-connexions').textContent = data.connexions_today ?? 0;
-    if (el('admin-stat-co-sub')) el('admin-stat-co-sub').textContent = 'sur ' + (data.total_users ?? 0) + ' étudiants';
-    if (el('admin-co-jour')) el('admin-co-jour').textContent = data.connexions_today ?? 0;
-    if (el('admin-actifs')) el('admin-actifs').textContent = data.actifs ?? 0;
-    // Activité récente
-    if (data.activite_recente && el('admin-activity-list')) {
-      if (data.activite_recente.length > 0) {
-        const colors = ['var(--blue-l)','var(--green-l)','var(--pink-l)','var(--orange-l)'];
-        const textColors = ['var(--blue)','var(--green)','var(--pink)','var(--orange)'];
-        el('admin-activity-list').innerHTML = data.activite_recente.map((a, i) => {
-          const initiales = (a.prenom?.[0] || '') + (a.nom?.[0] || '');
-          const c = colors[i % colors.length], tc = textColors[i % textColors.length];
-          return `<div style="display:flex;gap:.8rem;align-items:center;font-size:13px;">
-            <div style="width:34px;height:34px;border-radius:50%;background:${c};color:${tc};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">${initiales}</div>
-            <div><div style="font-weight:600;">${a.prenom} ${a.nom} — ${a.action}</div><div style="font-size:12px;color:var(--text3);">${a.temps}</div></div>
-          </div>`;
-        }).join('');
-      } else {
-        el('admin-activity-list').innerHTML = '<div class="empty-state"><div class="ei">🕐</div><p>Aucune activité récente</p></div>';
-      }
-    }
-    // Progression stats
-    if (data.progression_matieres && el('admin-stats-progression')) {
-      const matColors = {'Algorithmique':'var(--blue)','Électromagnétisme':'var(--purple)','Analyse II':'var(--green)','Géométrie':'var(--orange)','Chimie':'var(--red)','Anglais A2':'var(--yellow)'};
-      const matEmoji = {'Algorithmique':'🔵','Électromagnétisme':'🟣','Analyse II':'🟢','Géométrie':'🟠','Chimie':'🟡','Anglais A2':'🌐','IDFOT':'🩵',"Atelier d'écriture":'🩷','Réflexion humaine':'🔴'};
-      el('admin-stats-progression').innerHTML = data.progression_matieres.map(m => {
-        const color = matColors[m.matiere] || 'var(--blue)';
-        const emoji = matEmoji[m.matiere] || '📚';
-        return `<div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">${emoji} ${m.matiere}</span><span style="font-size:12px;color:${color};font-weight:700;">${m.score}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${m.score}%;background:${color}"></div></div></div>`;
-      }).join('');
-    }
-    // Admin matieres difficulty
-    if (data.matieres_difficiles && el('admin-matieres-difficulty')) {
-      if (data.matieres_difficiles.length > 0) {
-        const diffColors = ['var(--red)','var(--orange)','var(--yellow)','var(--green)'];
-        el('admin-matieres-difficulty').innerHTML = data.matieres_difficiles.map((m, i) => {
-          const color = diffColors[Math.min(i, diffColors.length-1)];
-          return `<div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">${m.matiere}</span><span style="font-size:12px;color:${color};font-weight:700;">${m.taux}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${m.taux}%;background:${color}"></div></div></div>`;
-        }).join('');
-      } else {
-        el('admin-matieres-difficulty').innerHTML = '<div class="empty-state"><div class="ei">📊</div><p>Pas encore de données</p></div>';
-      }
-    }
-  } catch(e) { console.log('Admin data error:', e); }
-
-  // Load users list
-  try {
-    const users = await api('GET', '/admin/users');
-    const tbody = document.getElementById('admin-users-tbody');
-    const countEl = document.getElementById('admin-users-count');
-    if (countEl) countEl.textContent = 'Gérer les ' + users.length + ' étudiants inscrits';
-    if (tbody) {
-      if (users.length > 0) {
-        tbody.innerHTML = users.map(u => {
-          const lastCo = u.derniere_connexion ? new Date(u.derniere_connexion).toLocaleDateString('fr-FR') : 'Jamais';
-          const statusClass = u.derniere_connexion && (Date.now() - new Date(u.derniere_connexion) < 86400000*7) ? 'status-active' : 'status-inactive';
-          const statusText = statusClass === 'status-active' ? 'Actif' : 'Inactif';
-          return `<tr>
-            <td><div style="font-weight:700;">${u.prenom} ${u.nom}</div><div style="font-size:11px;color:var(--text3);">${u.email}</div></td>
-            <td>${u.role === 'admin' ? '👑 Admin' : 'Étudiant'}</td>
-            <td><span class="status-dot ${statusClass}"></span>${statusText}</td>
-            <td>${u.fiches_count ?? 0}</td>
-            <td>${lastCo}</td>
-            <td><button class="btn btn-outline btn-sm" onclick="toast('Profil: ${u.prenom} ${u.nom}')">Voir</button></td>
-          </tr>`;
-        }).join('');
-      } else {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">Aucun étudiant inscrit</td></tr>';
-      }
-    }
-  } catch(e) { console.log('Users load error:', e); }
-}
-
-// ===== ADMIN - Matières modifiables =====
-function editMatiere(btn) {
-  const card = btn.closest('.card');
-  const h3 = card.querySelector('h3');
-  const nomMatiere = h3.textContent;
-  const infoDiv = card.querySelector('[style*="font-size:12px;color:var(--text2)"]');
-  const currentTeacher = infoDiv?.textContent || '';
-  const coefDiv = card.querySelector('[style*="color:var(--text3)"]');
-  const currentCoef = coefDiv?.textContent || '';
-
-  // Toggle edit mode
-  if (btn.textContent.includes('Modifier')) {
-    btn.textContent = '💾 Sauvegarder';
-    btn.classList.remove('btn-outline'); btn.classList.add('btn-blue');
-    if (infoDiv) infoDiv.innerHTML = `<input type="text" id="edit-teacher-${nomMatiere}" value="${currentTeacher}" style="width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:13px;font-family:var(--font-body);">`;
-  } else {
-    btn.textContent = '✏️ Modifier';
-    btn.classList.add('btn-outline'); btn.classList.remove('btn-blue');
-    const input = card.querySelector('input[type=text]');
-    if (input && infoDiv) {
-      const newVal = input.value;
-      infoDiv.textContent = newVal;
-      toast('Enseignant mis à jour : ' + nomMatiere);
-      // TODO: save to backend
-    }
-  }
-}
-
-// ===== NAVIGATION =====
-const selectedSubjects = [];
-
-function showSection(s) {
-  document.querySelectorAll('#page-app .section').forEach(x => x.classList.remove('active-section'));
-  const sec = document.getElementById('section-' + s);
-  if (sec) sec.classList.add('active-section');
-  document.querySelectorAll('#page-app .nav-item').forEach(x => x.classList.remove('active'));
-  document.querySelectorAll('#page-app .nav-item').forEach(item => {
-    if (item.getAttribute('onclick')?.includes(`'${s}'`)) item.classList.add('active');
-  });
-  history.pushState({ page: 'app', section: s }, '', '#app/' + s);
-}
-
-function showAdminSection(s) {
-  document.querySelectorAll('.admin-section').forEach(x => x.classList.remove('active-section'));
-  const sec = document.getElementById('admin-section-' + s);
-  if (sec) sec.classList.add('active-section');
-  document.querySelectorAll('#page-admin .nav-item').forEach(x => x.classList.remove('active'));
-  document.querySelectorAll('#page-admin .nav-item').forEach(item => {
-    if (item.getAttribute('onclick')?.includes(`'${s}'`)) item.classList.add('active');
-  });
-  if (s === 'admin-users' || s === 'admin-stats' || s === 'admin-overview') loadAdminData();
-}
-
-// ===== DAILY FORM =====
-function toggleSubject(cb) {
-  const val = cb.value;
-  if (cb.checked) { if (!selectedSubjects.includes(val)) selectedSubjects.push(val); }
-  else { const i = selectedSubjects.indexOf(val); if (i > -1) selectedSubjects.splice(i, 1); }
-  cb.closest('label').style.borderColor = cb.checked ? 'var(--blue)' : '';
-  cb.closest('label').style.background = cb.checked ? 'var(--blue-l)' : '';
-  cb.closest('label').style.color = cb.checked ? 'var(--blue)' : '';
-}
-
-function goStep(n) {
-  if (n === 2 && selectedSubjects.length === 0) { toast('Sélectionne au moins une matière 😊'); return; }
-  document.querySelectorAll('.daily-step').forEach(x => x.classList.remove('active'));
-  document.getElementById('step-' + n).classList.add('active');
-  for (let i = 0; i < 3; i++) {
-    const pip = document.getElementById('pip-' + i);
-    if (!pip) continue;
-    pip.classList.remove('done', 'active');
-    if (i < n - 1) pip.classList.add('done');
-    else if (i === n - 1) pip.classList.add('active');
-  }
-  if (n === 2) buildUploadCards();
-  if (n === 3) runGeneration();
-}
-
-function buildUploadCards() {
-  const c = document.getElementById('upload-cards');
-  const subs = selectedSubjects.length > 0 ? selectedSubjects : ['Algorithmique', 'Analyse II'];
-  const colors = {
-    'Algorithmique': 'var(--blue)', 'Électromagnétisme': 'var(--purple)', 'Analyse II': 'var(--green)',
-    'Géométrie': 'var(--orange)', 'IDFOT': 'var(--teal)', "Atelier d'écriture": 'var(--pink)',
-    'Réflexion humaine': 'var(--red)', 'Chimie': 'var(--yellow)', 'Anglais A2': '#06b6d4'
+function formatDateShort(str) {
+  if (!str) return { day:'--', month:'---' };
+  const d = new Date(str);
+  return {
+    day: d.getDate(),
+    month: d.toLocaleDateString('fr-FR',{month:'short'}).replace('.','')
   };
-  c.innerHTML = subs.map(s => `
-    <div class="upload-card">
-      <div class="subj-name">
-        <span style="font-weight:800;color:${colors[s] || 'var(--blue)'};">${s}</span>
-        <span class="tag tag-blue" style="font-size:11px;">En attente</span>
-      </div>
-      <div class="upload-zone" onclick="toast('Sélectionne un fichier PDF ou vidéo pour ${s}')">
-        <div class="up-icon">📎</div>
-        <div>Cliquer pour ajouter un <strong>PDF</strong> ou une <strong>vidéo</strong> du cours</div>
-        <div style="font-size:11px;margin-top:.3rem;color:var(--text3);">PDF, MP4, MOV — Max 50 Mo</div>
-      </div>
-    </div>`).join('');
 }
 
-function runGeneration() {
-  const fill = document.getElementById('gen-fill');
-  const title = document.getElementById('gen-title');
-  const sub = document.getElementById('gen-sub');
-  const icon = document.getElementById('gen-icon');
-  const pct = document.getElementById('gen-pct');
-  const steps = [
-    [200, '25%', 'Analyse des documents…', 'Extraction des concepts clés'],
-    [2200, '55%', 'Structuration des fiches…', 'Organisation par thèmes et priorités'],
-    [4200, '80%', 'Génération des exercices…', 'Création de questions adaptées'],
-    [6200, '95%', 'Finalisation…', 'Mise en forme et vérification'],
-    [7500, '100%', '🎉 Fiches prêtes !', 'Tes fiches et exercices sont disponibles'],
-  ];
-  steps.forEach(([delay, p, t, s]) => {
-    setTimeout(() => {
-      fill.style.width = p; title.textContent = t; sub.textContent = s; pct.textContent = p;
-      if (p === '100%') { icon.textContent = '✅'; icon.style.animation = 'none'; setTimeout(() => showSection('fiches'), 1500); }
-    }, delay);
+function rubriqueLabel(r) {
+  return { cours:'Cours & Projets', vie:'Vie de classe', talents:'Talents', sport:'Sports & Loisirs', philo:'Réflexion Humaine' }[r] || r;
+}
+
+function rubriqueColor(r) {
+  return { cours:'#F5A623', vie:'#00C2CB', talents:'#c084fc', sport:'#4ade80', philo:'#a78bfa' }[r] || '#888';
+}
+
+/* ════════════════════════════════════════════════
+   AUTH
+   ════════════════════════════════════════════════ */
+function openAuth() { document.getElementById('auth-modal').classList.add('open'); }
+function closeAuth() { document.getElementById('auth-modal').classList.remove('open'); }
+
+function switchTab(tab) {
+  document.getElementById('tab-login').style.display = tab==='login' ? 'block' : 'none';
+  document.getElementById('tab-register').style.display = tab==='register' ? 'block' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+}
+
+function setToken(token, user) {
+  currentToken = token;
+  currentUser = user;
+  localStorage.setItem('ing1b_token', token);
+  localStorage.setItem('ing1b_user', JSON.stringify(user));
+  renderAuthArea();
+  closeAuth();
+}
+
+function logout() {
+  currentToken = null; currentUser = null;
+  localStorage.removeItem('ing1b_token');
+  localStorage.removeItem('ing1b_user');
+  renderAuthArea();
+  toast('Déconnecté', 'info');
+}
+
+function renderAuthArea() {
+  const area = document.getElementById('auth-area');
+  if (!currentUser) {
+    area.innerHTML = `<button class="icon-btn" onclick="openAuth()" title="Se connecter">👤</button>`;
+  } else {
+    const isAdmin = currentUser.role === 'admin';
+    const avatar = currentUser.avatar
+      ? `<img src="${currentUser.avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover">`
+      : `<div class="chip-avatar">${initials(currentUser.name)}</div>`;
+    area.innerHTML = `
+      ${isAdmin ? `<button class="icon-btn" onclick="openAdmin()" title="Panneau admin" style="border-color:var(--rouge);color:var(--rouge)">⚙️</button>` : ''}
+      <div class="user-chip" onclick="logout()">
+        ${avatar}
+        <span>${currentUser.name.split(' ')[0]}</span>
+        <span style="color:var(--gris);font-size:11px">↩</span>
+      </div>
+    `;
+  }
+}
+
+async function loginEmail() {
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Connexion…';
+  try {
+    const data = await apiFetch('/auth/login', {
+      method:'POST',
+      body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value })
+    });
+    setToken(data.token, data.user);
+    toast(`Bienvenue ${data.user.name} !`, 'success');
+    loadPoll();
+  } catch(e) { toast(e.message, 'error'); }
+  finally { btn.disabled=false; btn.textContent='Se connecter'; }
+}
+
+async function registerEmail() {
+  const btn = document.getElementById('register-btn');
+  btn.disabled=true; btn.textContent='Création…';
+  try {
+    const data = await apiFetch('/auth/register', {
+      method:'POST',
+      body: JSON.stringify({
+        name: document.getElementById('reg-name').value,
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value
+      })
+    });
+    setToken(data.token, data.user);
+    toast(`Compte créé ! Bienvenue ${data.user.name} 🎉`, 'success');
+    loadPoll();
+  } catch(e) { toast(e.message, 'error'); }
+  finally { btn.disabled=false; btn.textContent='Créer mon compte'; }
+}
+
+async function handleGoogleCredential(response) {
+  try {
+    const data = await apiFetch('/auth/google', { method:'POST', body: JSON.stringify({ credential: response.credential }) });
+    setToken(data.token, data.user);
+    toast(`Connecté via Google ! Bonjour ${data.user.name} 👋`, 'success');
+    loadPoll();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function initGoogle() {
+  if (!window.google || GOOGLE_CLIENT_ID.includes('COLLE')) return;
+  google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
+  ['google-btn-login','google-btn-register'].forEach(id => {
+    google.accounts.id.renderButton(document.getElementById(id), { theme:'outline', size:'large', width:368, text:'continue_with', locale:'fr' });
   });
 }
 
-// ===== EXERCICES =====
-function selectChoice(qId, idx, type) {
-  const choices = document.querySelectorAll(`#${qId}-choices .choice`);
-  choices.forEach(c => c.classList.remove('selected', 'correct', 'wrong'));
-  choices[idx].classList.add(type === 'correct' ? 'correct' : 'wrong');
-  if (type === 'wrong') {
-    choices.forEach(c => { if (c.getAttribute('onclick')?.includes("'correct'")) c.classList.add('correct'); });
-  }
-  const exp = document.getElementById('exp-' + qId);
-  if (exp) exp.classList.add('show');
-}
-
-// ===== CHAT =====
-const SYSTEM_PROMPT = `Tu es le KSA (Kingsley School Assistant), l'assistant académique intelligent des étudiants de première année d'ingénierie (Ingé1) à Kingsley School, Yaoundé, Cameroun.
-Tu connais parfaitement les matières du programme Ingé1 de Kingsley :
-- 🔵 Algorithmique : structures de données, algorithmes de tri, complexité, récursivité, graphes
-- 🟣 Électromagnétisme : loi de Coulomb, champ électrique, loi de Gauss, potentiel, magnétostatique
-- 🟢 Analyse II : séries numériques, séries entières, intégrales impropres, équations différentielles
-- 🟠 Géométrie : espaces vectoriels, coniques, quadriques, géométrie analytique, transformations
-- 🩵 IDFOT (Dessin technique) : normes ISO, vues, coupes, cotation, perspective
-- 🩷 Atelier d'écriture : rédaction académique, argumentation, synthèse de documents
-- 🔴 Réflexion humaine : philosophie, éthique, épistémologie, logique
-- 🟡 Chimie : liaisons chimiques, thermodynamique chimique, cinétique, équilibres
-- 🌐 Anglais A2 : grammaire, vocabulaire technique, expression écrite et orale
-Tes règles :
-1. Réponds TOUJOURS en français sauf si l'étudiant écrit en anglais
-2. Sois pédagogue, encourageant et bienveillant
-3. Donne des explications claires avec des exemples concrets
-4. Utilise des formules mathématiques quand nécessaire
-5. Propose toujours d'aller plus loin : exercices, fiches, exemples supplémentaires
-6. Adapte ton niveau à celui d'un étudiant de 1ère année ingénierie`;
-
-let chatHistory = [];
-
-function chatKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-}
-
-function escapeHtml(text) {
-  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
-
-async function sendChat() {
-  const inp = document.getElementById('chat-input');
-  const msg = inp.value.trim();
-  if (!msg) return;
-  const msgs = document.getElementById('chat-messages');
-  const typing = document.getElementById('typing');
-  const initiales = currentUser ? (currentUser.prenom?.[0]||'') + (currentUser.nom?.[0]||'') : 'U';
-  msgs.innerHTML += `
-    <div class="msg user" style="animation:fadeUp .2s ease">
-      <div class="msg-av" style="background:var(--blue-l);color:var(--blue);border:2px solid var(--blue-m);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;">${initiales}</div>
-      <div class="msg-bubble">${escapeHtml(msg)}</div>
-    </div>`;
-  inp.value = '';
-  msgs.scrollTop = msgs.scrollHeight;
-  chatHistory.push({ role: 'user', content: msg });
-  typing.classList.add('show');
-  msgs.scrollTop = msgs.scrollHeight;
+/* ════════════════════════════════════════════════
+   ARTICLES
+   ════════════════════════════════════════════════ */
+async function loadArticles(rubrique=null) {
+  const grid = document.getElementById('articles-grid');
+  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div><span>Chargement…</span></div>';
   try {
-    const response = await fetch(API_URL + '/chat', {
-      method: 'POST', headers: apiHeaders(),
-      body: JSON.stringify({ message: msg, history: chatHistory })
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Erreur');
-    const reply = data.reply || '';
-    chatHistory.push({ role: 'assistant', content: reply });
-    typing.classList.remove('show');
-    msgs.innerHTML += `
-      <div class="msg ai" style="animation:fadeUp .2s ease">
-        <div class="msg-av">🤖</div>
-        <div class="msg-bubble">${escapeHtml(reply)}</div>
-      </div>`;
-    msgs.scrollTop = msgs.scrollHeight;
-  } catch (err) {
-    typing.classList.remove('show');
-    msgs.innerHTML += `
-      <div class="msg ai" style="animation:fadeUp .2s ease">
-        <div class="msg-av">🤖</div>
-        <div class="msg-bubble" style="border-color:var(--red-m);background:var(--red-l);color:var(--red);">⚠️ Erreur de connexion. Vérifie ta connexion internet et réessaie.</div>
-      </div>`;
-    msgs.scrollTop = msgs.scrollHeight;
+    let url = '/articles';
+    if (rubrique) url += `?rubrique=${rubrique}`;
+    allArticles = await apiFetch(url);
+    renderHero(allArticles);
+    renderGrid(allArticles);
+  } catch(e) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">⚠️<p>Impossible de charger les articles. Lance d'abord le backend.</p></div>`;
   }
 }
 
-// ===== THEME =====
-function setAccent(color, light, mid) {
-  document.documentElement.style.setProperty('--blue', color);
-  document.documentElement.style.setProperty('--blue-l', light);
-  document.documentElement.style.setProperty('--blue-m', mid);
-  document.querySelectorAll('.theme-swatch').forEach(s => s.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-  toast('Thème mis à jour ! 🎨');
+function renderHero(articles) {
+  if (!articles.length) return;
+  const a = articles[0];
+  document.getElementById('hero-kicker').textContent = (a.kicker || rubriqueLabel(a.rubrique)) + ' · À la une';
+  document.getElementById('hero-title').textContent = a.title;
+  document.getElementById('hero-excerpt').textContent = a.excerpt || '';
+  document.getElementById('hero-author').textContent = a.author_name || 'Équipe éditoriale';
+  document.getElementById('hero-date').textContent = formatDate(a.created_at) + ' · ' + Math.max(1, Math.ceil((a.body||'').split(' ').length/200)) + ' min';
+  document.getElementById('hero-avatar').textContent = initials(a.author_name||'IB');
+  document.getElementById('hero-emoji').textContent = a.cover_emoji || '📰';
+  document.getElementById('hero-img').style.background = `linear-gradient(135deg, ${a.cover_color||'#1A2E6E'}, #0d1f4e)`;
+  document.getElementById('hero-label').textContent = rubriqueLabel(a.rubrique);
+  document.getElementById('hero-read-btn').onclick = () => openReader(a);
+
+  // Articles secondaires
+  const secondary = articles.slice(1, 3);
+  document.getElementById('hero-secondary').innerHTML = secondary.map((s, i) => `
+    <div class="side-article" onclick="openReader(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+      <div class="side-num">0${i+2}</div>
+      <div class="side-cat" style="color:${rubriqueColor(s.rubrique)}">${rubriqueLabel(s.rubrique)}</div>
+      <div class="side-title">${s.title}</div>
+      <div class="side-meta">${s.author_name||'ING1B'} · ${Math.max(1,Math.ceil((s.body||'').split(' ').length/200))} min</div>
+    </div>
+  `).join('');
 }
 
-// ===== TOAST =====
-let toastTimer;
-function toast(msg) {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  clearTimeout(toastTimer);
-  const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t);
-  toastTimer = setTimeout(() => t.remove(), 3000);
+function renderGrid(articles) {
+  const grid = document.getElementById('articles-grid');
+  const items = articles.slice(1);
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">📭<p>Aucun article pour l\'instant. Sois le premier à publier !</p></div>';
+    return;
+  }
+  grid.innerHTML = items.map(a => `
+    <div class="article-card fade-in" onclick="openReader(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+      <div class="card-img" style="background:linear-gradient(135deg,${a.cover_color||'#1A2E6E'},#0d1f4e)">
+        <span style="z-index:1">${a.cover_emoji||'📰'}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-rubrique" style="color:${rubriqueColor(a.rubrique)}">${rubriqueLabel(a.rubrique)}</div>
+        <div class="card-title">${a.title}</div>
+        <div class="card-excerpt">${a.excerpt || ''}</div>
+        <div class="card-footer">
+          <span>${a.author_name||'ING1B'}</span>
+          <span class="mono">${Math.max(1,Math.ceil((a.body||'').split(' ').length/200))} min · ${a.views||0} vues</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  observeFadeIn();
 }
+
+function filterRubrique(rubrique, navEl) {
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+
+  const dot = document.getElementById('grid-dot');
+  const title = document.getElementById('grid-title');
+  if (!rubrique) {
+    title.textContent = 'Articles récents';
+    dot.style.background = 'var(--or)';
+  } else {
+    title.textContent = rubriqueLabel(rubrique);
+    dot.style.background = rubriqueColor(rubrique);
+  }
+  loadArticles(rubrique);
+}
+
+/* ════════════════════════════════════════════════
+   READER MODAL
+   ════════════════════════════════════════════════ */
+function openReader(a) {
+  if (typeof a === 'string') a = JSON.parse(a);
+  document.getElementById('r-kicker').textContent = (a.kicker || rubriqueLabel(a.rubrique));
+  document.getElementById('r-title').textContent = a.title;
+  document.getElementById('r-meta').textContent = `${a.author_name||'ING1B'} · ${formatDate(a.created_at)} · ${Math.max(1,Math.ceil((a.body||'').split(' ').length/200))} min de lecture · ${(a.views||0)+1} vues`;
+  document.getElementById('r-body').innerHTML = a.body || '<p>Contenu non disponible.</p>';
+  document.getElementById('reader-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Incrémenter vues
+  apiFetch(`/articles/${a.id}/view`||`/articles/${a.id}`, {}).catch(()=>{});
+}
+
+function closeReader() {
+  document.getElementById('reader-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ════════════════════════════════════════════════
+   AGENDA
+   ════════════════════════════════════════════════ */
+async function loadAgenda() {
+  try {
+    const events = await apiFetch('/agenda');
+    renderAgenda(events);
+  } catch(e) {
+    document.getElementById('agenda-list').innerHTML = '<div class="empty-state">Agenda indisponible</div>';
+  }
+}
+
+function renderAgenda(events) {
+  const list = document.getElementById('agenda-list');
+  if (!events.length) { list.innerHTML = '<div class="empty-state">Aucun événement</div>'; return; }
+  list.innerHTML = events.map(ev => {
+    const { day, month } = formatDateShort(ev.date);
+    return `
+      <div class="agenda-item">
+        <div class="agenda-date"><div class="day">${day}</div><div class="month">${month}</div></div>
+        <div class="agenda-info"><h4>${ev.title}</h4><p>${ev.description||''}</p></div>
+        ${ev.tag ? `<div class="agenda-tag" style="background:${ev.tag_color}22;color:${ev.tag_color}">${ev.tag}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════
+   SONDAGE
+   ════════════════════════════════════════════════ */
+async function loadPoll() {
+  try {
+    const data = await apiFetch('/poll');
+    renderPoll(data, null);
+  } catch(e) {
+    document.getElementById('poll-options').innerHTML = '<div class="empty-state">Sondage indisponible</div>';
+  }
+}
+
+function renderPoll(data, votedId) {
+  const colors = ['var(--rouge)','var(--bleu)','var(--cyan)','var(--or)'];
+  const total = data.total || 1;
+  document.getElementById('poll-options').innerHTML = data.options.map((opt, i) => {
+    const pct = Math.round(opt.votes / total * 100);
+    return `
+      <div class="poll-option" onclick="vote(${opt.id})">
+        <div class="poll-opt-label">
+          <span>${opt.label}</span>
+          <span>${pct}%</span>
+        </div>
+        <div class="poll-bar-track">
+          <div class="poll-bar-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('poll-total').textContent = `${data.total} votes`;
+
+  if (!currentUser) {
+    document.getElementById('poll-login-note').style.display = 'block';
+  }
+}
+
+async function vote(optionId) {
+  if (!currentUser) { toast('Connecte-toi pour voter', 'info'); openAuth(); return; }
+  try {
+    const data = await apiFetch(`/poll/${optionId}/vote`, { method:'POST' });
+    renderPoll(data, optionId);
+    toast('Vote enregistré !', 'success');
+    document.getElementById('poll-login-note').style.display = 'none';
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+/* ════════════════════════════════════════════════
+   ADMIN PANEL
+   ════════════════════════════════════════════════ */
+function openAdmin() {
+  if (!currentUser || currentUser.role !== 'admin') { toast('Accès refusé', 'error'); return; }
+  document.getElementById('admin-panel').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  loadAdminDashboard();
+}
+
+function closeAdmin() {
+  document.getElementById('admin-panel').style.display = 'none';
+  document.body.style.overflow = '';
+  loadArticles();
+}
+
+function adminTab(name) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + name.replace('-','_').replace('-','_')).classList.add('active');
+  event.target.classList.add('active');
+
+  if (name === 'dashboard') loadAdminDashboard();
+  else if (name === 'articles') loadAdminArticles();
+  else if (name === 'new-article') { resetArticleForm(); }
+  else if (name === 'agenda') loadAdminAgenda();
+  else if (name === 'users') loadAdminUsers();
+}
+
+// Fix: mapping section IDs
+const sectionMap = { 'dashboard':'sec-dashboard','articles':'sec-articles','new-article':'sec-new-article','agenda':'sec-agenda','users':'sec-users' };
+function adminTab(name) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById(sectionMap[name]);
+  if (sec) sec.classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+  if (name === 'dashboard') loadAdminDashboard();
+  else if (name === 'articles') loadAdminArticles();
+  else if (name === 'new-article') resetArticleForm();
+  else if (name === 'agenda') loadAdminAgenda();
+  else if (name === 'users') loadAdminUsers();
+}
+
+async function loadAdminDashboard() {
+  try {
+    const [arts, users] = await Promise.all([
+      apiFetch('/articles?status=all'),
+      apiFetch('/auth/users')
+    ]);
+    const published = arts.filter(a => a.status === 'published');
+    const drafts = arts.filter(a => a.status === 'draft');
+    const totalViews = arts.reduce((s,a) => s+(a.views||0), 0);
+    document.getElementById('stat-articles').textContent = published.length;
+    document.getElementById('stat-drafts').textContent = drafts.length;
+    document.getElementById('stat-members').textContent = users.length;
+    document.getElementById('stat-views').textContent = totalViews;
+    document.getElementById('dash-articles-list').innerHTML = arts.slice(0,5).map(a => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1a1a1a">
+        <span style="font-size:24px">${a.cover_emoji||'📰'}</span>
+        <div style="flex:1">
+          <div style="color:#fff;font-weight:500;font-size:14px">${a.title}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:#555;margin-top:2px">${rubriqueLabel(a.rubrique)} · ${a.views||0} vues</div>
+        </div>
+        <span class="status-badge ${a.status === 'published' ? 'status-published':'status-draft'}">${a.status==='published'?'Publié':'Brouillon'}</span>
+        <div class="table-actions">
+          <button class="btn-admin secondary" style="padding:6px 10px;font-size:12px" onclick="editArticle(${JSON.stringify(a).replace(/"/g,'&quot;')})">Modifier</button>
+          <button class="btn-admin danger" style="padding:6px 10px;font-size:12px" onclick="deleteArticle(${a.id})">Suppr.</button>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) { toast('Erreur chargement dashboard : '+e.message, 'error'); }
+}
+
+async function loadAdminArticles() {
+  const tbody = document.getElementById('admin-articles-tbody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#555">Chargement…</td></tr>';
+  try {
+    const arts = await apiFetch('/articles?status=all');
+    tbody.innerHTML = arts.map(a => `
+      <tr>
+        <td class="title-cell">${a.title}<small>${a.author_name||'—'} · ${formatDate(a.created_at)}</small></td>
+        <td><span style="color:${rubriqueColor(a.rubrique)};font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1px">${rubriqueLabel(a.rubrique)}</span></td>
+        <td><span class="status-badge ${a.status==='published'?'status-published':'status-draft'}">${a.status==='published'?'Publié':'Brouillon'}</span></td>
+        <td style="font-family:var(--mono)">${a.views||0}</td>
+        <td style="font-family:var(--mono);font-size:12px;color:#555">${formatDate(a.created_at)}</td>
+        <td>
+          <div class="table-actions">
+            <button class="btn-admin ${a.status==='published'?'secondary':'success'}" style="padding:5px 10px;font-size:12px" onclick="toggleStatus(${a.id},'${a.status==='published'?'draft':'published'}')">
+              ${a.status==='published'?'Dépublier':'Publier'}
+            </button>
+            <button class="btn-admin secondary" style="padding:5px 10px;font-size:12px" onclick="editArticle(${JSON.stringify(a).replace(/"/g,'&quot;')})">✏️</button>
+            <button class="btn-admin danger" style="padding:5px 10px;font-size:12px" onclick="deleteArticle(${a.id})">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="6" style="text-align:center;padding:24px;color:#555">Aucun article</td></tr>';
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function editArticle(a) {
+  if (typeof a === 'string') a = JSON.parse(a);
+  document.getElementById('article-form-title').textContent = 'Modifier l\'article';
+  document.getElementById('edit-article-id').value = a.id;
+  document.getElementById('f-title').value = a.title || '';
+  document.getElementById('f-rubrique').value = a.rubrique || '';
+  document.getElementById('f-kicker').value = a.kicker || '';
+  document.getElementById('f-excerpt').value = a.excerpt || '';
+  document.getElementById('f-body').value = a.body || '';
+  document.getElementById('f-color').value = a.cover_color || '#1A2E6E';
+  document.querySelectorAll('.emoji-opt').forEach(e => {
+    e.classList.toggle('selected', e.dataset.emoji === (a.cover_emoji||'📰'));
+  });
+  // Switch to form tab
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-new-article').classList.add('active');
+}
+
+function resetArticleForm() {
+  document.getElementById('article-form-title').textContent = 'Nouvel article';
+  document.getElementById('edit-article-id').value = '';
+  ['f-title','f-kicker','f-excerpt','f-body'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-rubrique').value = '';
+  document.getElementById('f-color').value = '#1A2E6E';
+  document.querySelectorAll('.emoji-opt').forEach((e,i) => e.classList.toggle('selected', i===0));
+}
+
+async function saveArticle(status) {
+  const id = document.getElementById('edit-article-id').value;
+  const selectedEmoji = document.querySelector('.emoji-opt.selected');
+  const payload = {
+    title: document.getElementById('f-title').value.trim(),
+    kicker: document.getElementById('f-kicker').value.trim(),
+    excerpt: document.getElementById('f-excerpt').value.trim(),
+    body: document.getElementById('f-body').value.trim(),
+    rubrique: document.getElementById('f-rubrique').value,
+    cover_emoji: selectedEmoji ? selectedEmoji.dataset.emoji : '📰',
+    cover_color: document.getElementById('f-color').value,
+    status
+  };
+  if (!payload.title || !payload.body || !payload.rubrique) {
+    toast('Titre, corps et rubrique sont requis', 'error'); return;
+  }
+  try {
+    if (id) {
+      await apiFetch(`/articles/${id}`, { method:'PUT', body:JSON.stringify(payload) });
+      toast('Article modifié !', 'success');
+    } else {
+      await apiFetch('/articles', { method:'POST', body:JSON.stringify(payload) });
+      toast(status==='published' ? 'Article publié ! 🎉' : 'Brouillon enregistré', 'success');
+    }
+    resetArticleForm();
+    loadAdminArticles();
+    document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('sec-articles').classList.add('active');
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function toggleStatus(id, newStatus) {
+  try {
+    await apiFetch(`/articles/${id}/status`, { method:'PATCH', body:JSON.stringify({ status:newStatus }) });
+    toast(newStatus==='published' ? 'Article publié !' : 'Article dépublié', 'success');
+    loadAdminArticles();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function deleteArticle(id) {
+  if (!confirm('Supprimer cet article définitivement ?')) return;
+  try {
+    await apiFetch(`/articles/${id}`, { method:'DELETE' });
+    toast('Article supprimé', 'success');
+    loadAdminArticles();
+    loadAdminDashboard();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+async function loadAdminAgenda() {
+  try {
+    const events = await apiFetch('/agenda');
+    document.getElementById('agenda-admin-list').innerHTML = events.length
+      ? events.map(ev => `
+        <div class="agenda-admin-item">
+          <div class="agenda-admin-info">
+            <strong>${ev.title}</strong>
+            <small>${ev.date} — ${ev.description||''}</small>
+          </div>
+          ${ev.tag ? `<span class="agenda-tag" style="background:${ev.tag_color}22;color:${ev.tag_color}">${ev.tag}</span>` : ''}
+          <button class="btn-admin danger" style="padding:5px 10px;font-size:12px" onclick="deleteEvent(${ev.id})">🗑️</button>
+        </div>
+      `).join('')
+      : '<div style="color:#555;text-align:center;padding:20px">Aucun événement</div>';
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function addEvent() {
+  const payload = {
+    title: document.getElementById('ev-title').value.trim(),
+    description: document.getElementById('ev-desc').value.trim(),
+    date: document.getElementById('ev-date').value,
+    tag: document.getElementById('ev-tag').value.trim(),
+    tag_color: document.getElementById('ev-color').value
+  };
+  if (!payload.title || !payload.date) { toast('Titre et date requis','error'); return; }
+  try {
+    await apiFetch('/agenda', { method:'POST', body:JSON.stringify(payload) });
+    toast('Événement ajouté !','success');
+    ['ev-title','ev-desc','ev-date','ev-tag'].forEach(id => document.getElementById(id).value='');
+    loadAdminAgenda();
+    loadAgenda();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Supprimer cet événement ?')) return;
+  try {
+    await apiFetch(`/agenda/${id}`, { method:'DELETE' });
+    toast('Événement supprimé','success');
+    loadAdminAgenda();
+    loadAgenda();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function loadAdminUsers() {
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#555">Chargement…</td></tr>';
+  try {
+    const users = await apiFetch('/auth/users');
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td style="display:flex;align-items:center;gap:10px">
+          ${u.avatar ? `<img src="${u.avatar}" style="width:30px;height:30px;border-radius:50%;object-fit:cover">` : `<div style="width:30px;height:30px;border-radius:50%;background:var(--bleu);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:#fff">${initials(u.name)}</div>`}
+          <span style="color:#fff;font-weight:500">${u.name}</span>
+        </td>
+        <td style="font-family:var(--mono);font-size:12px">${u.email}</td>
+        <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+        <td style="font-family:var(--mono);font-size:12px;color:#555">${formatDate(u.created_at)}</td>
+        <td>
+          ${u.id !== currentUser.id ? `
+            <button class="btn-admin ${u.role==='admin'?'secondary':'success'}" style="padding:5px 10px;font-size:12px" onclick="changeRole(${u.id},'${u.role==='admin'?'reader':'admin'}')">
+              ${u.role==='admin'?'Retirer admin':'Passer admin'}
+            </button>
+          ` : '<span style="color:#555;font-size:12px;font-family:var(--mono)">Moi</span>'}
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function changeRole(id, role) {
+  if (!confirm(`Changer le rôle de cet utilisateur en "${role}" ?`)) return;
+  try {
+    await apiFetch(`/auth/users/${id}/role`, { method:'PUT', body:JSON.stringify({ role }) });
+    toast('Rôle modifié !','success');
+    loadAdminUsers();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+/* ════════════════════════════════════════════════
+   KEYBOARD & MODAL CLOSE
+   ════════════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeAuth(); closeReader(); }
+});
+document.getElementById('auth-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeAuth(); });
+document.getElementById('reader-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeReader(); });
+
+/* ════════════════════════════════════════════════
+   FADE IN OBSERVER
+   ════════════════════════════════════════════════ */
+function observeFadeIn() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+  }, { threshold:.08 });
+  document.querySelectorAll('.fade-in:not(.visible)').forEach(el => obs.observe(el));
+}
+
+/* ════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  // Restore session
+  const savedToken = localStorage.getItem('ing1b_token');
+  const savedUser = localStorage.getItem('ing1b_user');
+  if (savedToken && savedUser) {
+    currentToken = savedToken;
+    currentUser = JSON.parse(savedUser);
+    renderAuthArea();
+  }
+
+  // Init Google
+  window.addEventListener('google-loaded', initGoogle);
+  setTimeout(initGoogle, 1500);
+
+  // Load data
+  loadArticles();
+  loadAgenda();
+  loadPoll();
+  observeFadeIn();
+});
 </script>
 </body>
 </html>
