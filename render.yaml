@@ -1,8 +1,10 @@
 services:
+  # ===== BACKEND API =====
   - type: web
     name: ksa-backend
     env: node
     region: frankfurt
+    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
@@ -16,17 +18,20 @@ services:
           name: ksa-db
           property: connectionString
       - key: ANTHROPIC_API_KEY
-        sync: false
+        sync: false  # À renseigner manuellement dans Render
       - key: ALLOWED_ORIGINS
-        sync: false
+        sync: false  # Renseigner l'URL de ton frontend Render
       - key: ADMIN_EMAIL
         value: admin@kingsley.edu
       - key: ADMIN_PASSWORD
         generateValue: true
 
+  # ===== FRONTEND STATIQUE =====
   - type: web
     name: ksa-frontend
     env: static
+    region: frankfurt
+    plan: free
     rootDir: frontend
     buildCommand: echo "No build needed"
     staticPublishPath: .
@@ -39,6 +44,7 @@ services:
         source: /*
         destination: /index.html
 
+# ===== BASE DE DONNÉES =====
 databases:
   - name: ksa-db
     region: frankfurt

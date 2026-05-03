@@ -7,7 +7,7 @@ Tu connais parfaitement les matières du programme Ingé1 de Kingsley :
 - 🟣 Électromagnétisme : loi de Coulomb, champ électrique, loi de Gauss, potentiel, magnétostatique
 - 🟢 Analyse II : séries numériques, séries entières, intégrales impropres, équations différentielles
 - 🟠 Géométrie : espaces vectoriels, coniques, quadriques, géométrie analytique, transformations
-- 🩵 IDFOT (Dessin technique) : normes ISO, vues, coupes, cotation, perspective
+- 🩵 IDFOR (Dessin technique) : normes ISO, vues, coupes, cotation, perspective
 - 🩷 Atelier d'écriture : rédaction académique, argumentation, synthèse de documents
 - 🔴 Réflexion humaine : philosophie, éthique, épistémologie, logique
 - 🟡 Chimie : liaisons chimiques, thermodynamique chimique, cinétique, équilibres
