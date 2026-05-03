@@ -460,9 +460,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       <span class="k">K</span><span class="s">S</span><span class="a">A</span><span class="dot"></span>
     </div>
     <div class="nav-links">
-      <a>Fonctionnalités</a>
-      <a>Programme</a>
-      <a>Kingsley</a>
+      <a onclick="scrollToSection('features')">Fonctionnalités</a>
+      <a onclick="scrollToSection('programme-section')">Programme</a>
+      <a href="https://kingsley.cm" target="_blank">Kingsley</a>
     </div>
     <div class="flex gap-1">
       <button class="btn btn-outline btn-sm" onclick="showPage('login')">Connexion</button>
@@ -486,7 +486,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       <button class="btn btn-blue btn-lg" onclick="showPage('register')">Commencer gratuitement 🚀</button>
       <button class="btn btn-outline btn-lg" onclick="showPage('login')">Se connecter</button>
     </div>
-    <div class="features-grid">
+    <div class="features-grid" id="features">
       <div class="feat-card">
         <div class="feat-icon" style="background:var(--blue-l);">📄</div>
         <h3>Fiches automatiques</h3>
@@ -533,7 +533,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       <p class="sub">Connecte-toi à ton espace étudiant</p>
       <div class="form-group">
         <label>Adresse email</label>
-        <input type="email" id="login-email" placeholder="[prenom.nom@kingsley.edu](mailto:prenom.nom@kingsley.edu)">
+        <input type="email" id="login-email" placeholder="votre@email.com">
       </div>
       <div class="form-group">
         <label>Mot de passe</label>
@@ -541,7 +541,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       </div>
       <button class="btn btn-blue w-full" style="margin-top:.5rem;" onclick="loginUser()">Se connecter</button>
       <div class="divider">ou</div>
-      <button class="btn btn-outline w-full" onclick="loginAdmin()">🔐 Connexion Administrateur</button>
+      <button class="btn btn-outline w-full" onclick="showAdminLoginModal()">🔐 Connexion Administrateur</button>
       <div class="auth-switch">Pas encore de compte ? <a onclick="showPage('register')">S'inscrire</a></div>
       <div style="text-align:center;margin-top:.5rem;">
         <a onclick="showPage('landing')" style="font-size:12px;color:var(--text3);cursor:pointer;">← Retour à l'accueil</a>
@@ -561,22 +561,18 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       <h2>Créer un compte</h2>
       <p class="sub">Rejoins l'assistant académique Ingé1</p>
       <div class="grid-2" style="gap:.8rem;">
-        <div class="form-group"><label>Prénom</label><input type="text" placeholder="Jean-Paul"></div>
-        <div class="form-group"><label>Nom</label><input type="text" placeholder="Mbarga"></div>
+        <div class="form-group"><label>Prénom</label><input type="text" id="reg-prenom" placeholder="Ton prénom"></div>
+        <div class="form-group"><label>Nom</label><input type="text" id="reg-nom" placeholder="Ton nom"></div>
       </div>
       <div class="form-group">
-        <label>Email universitaire</label>
-        <input type="email" placeholder="[jp.mbarga@kingsley.edu](mailto:jp.mbarga@kingsley.edu)">
-      </div>
-      <div class="form-group">
-        <label>Numéro étudiant</label>
-        <input type="text" placeholder="KS2025-XXXX">
+        <label>Adresse email</label>
+        <input type="email" id="reg-email" placeholder="votre@email.com">
       </div>
       <div class="form-group">
         <label>Mot de passe</label>
-        <input type="password" placeholder="Minimum 8 caractères">
+        <input type="password" id="reg-pass" placeholder="Minimum 8 caractères">
       </div>
-      <button class="btn btn-blue w-full" onclick="loginUser()">Créer mon compte 🎓</button>
+      <button class="btn btn-blue w-full" onclick="registerUser()">Créer mon compte 🎓</button>
       <div class="auth-switch">Déjà inscrit ? <a onclick="showPage('login')">Se connecter</a></div>
       <div style="text-align:center;margin-top:.5rem;">
         <a onclick="showPage('landing')" style="font-size:12px;color:var(--text3);cursor:pointer;">← Retour à l'accueil</a>
@@ -625,9 +621,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       </nav>
       <div class="sidebar-bottom">
         <div class="user-chip">
-          <div class="avatar avatar-blue">JP</div>
+          <div class="avatar avatar-blue" id="sidebar-avatar">?</div>
           <div class="user-info">
-            <div class="name">Jean-Paul M.</div>
+            <div class="name" id="sidebar-name">—</div>
             <div class="role">Étudiant Ingé1</div>
           </div>
         </div>
@@ -637,29 +633,29 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       <!-- DASHBOARD -->
       <div id="section-dashboard" class="section active-section">
         <div class="page-header">
-          <div class="dash-greeting">Bonjour, Jean-Paul 👋</div>
-          <div class="dash-date">Lundi 27 Avril 2026 — Semaine 14</div>
+          <div class="dash-greeting" id="dash-greeting">Bonjour 👋</div>
+          <div class="dash-date" id="dash-date"></div>
         </div>
         <div class="grid-4 mb-2x">
           <div class="stat-card" style="background:var(--blue-l);border-color:var(--blue-m);">
             <div class="stat-label">Fiches créées</div>
-            <div class="stat-val" style="color:var(--blue);">14</div>
+            <div class="stat-val" id="stat-fiches" style="color:var(--blue);">—</div>
             <div class="stat-sub">ce semestre</div>
           </div>
           <div class="stat-card" style="background:var(--pink-l);border-color:var(--pink-m);">
             <div class="stat-label">Exercices traités</div>
-            <div class="stat-val" style="color:var(--pink);">52</div>
-            <div class="stat-sub">succès 76%</div>
+            <div class="stat-val" id="stat-exercices" style="color:var(--pink);">—</div>
+            <div class="stat-sub" id="stat-exercices-sub"></div>
           </div>
           <div class="stat-card" style="background:var(--green-l);border-color:var(--green-m);">
             <div class="stat-label">Jours consécutifs</div>
-            <div class="stat-val" style="color:var(--green);">7</div>
+            <div class="stat-val" id="stat-streak" style="color:var(--green);">—</div>
             <div class="stat-sub">🔥 en cours</div>
           </div>
           <div class="stat-card" style="background:var(--orange-l);border-color:var(--orange-m);">
             <div class="stat-label">Prochaine révision</div>
-            <div class="stat-val" style="color:var(--orange);font-size:18px;">Auj.</div>
-            <div class="stat-sub">Analyse II</div>
+            <div class="stat-val" id="stat-revision" style="color:var(--orange);font-size:18px;">—</div>
+            <div class="stat-sub" id="stat-revision-sub">—</div>
           </div>
         </div>
         <div class="grid-2">
@@ -668,36 +664,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
               <h3>Progression par matière</h3>
               <span class="tag tag-blue">Ce mois</span>
             </div>
-            <div style="display:flex;flex-direction:column;gap:1rem;">
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🔵 Algorithmique</span><span style="font-size:12px;color:var(--text3);font-weight:700;">78%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:78%;background:var(--blue)"></div></div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟣 Électromagnétisme</span><span style="font-size:12px;color:var(--text3);font-weight:700;">55%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:55%;background:var(--purple)"></div></div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟢 Analyse II</span><span style="font-size:12px;color:var(--text3);font-weight:700;">88%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:88%;background:var(--green)"></div></div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟠 Géométrie</span><span style="font-size:12px;color:var(--text3);font-weight:700;">62%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:62%;background:var(--orange)"></div></div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🩵 IDFOT</span><span style="font-size:12px;color:var(--text3);font-weight:700;">70%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:70%;background:var(--teal)"></div></div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🔴 Chimie</span><span style="font-size:12px;color:var(--text3);font-weight:700;">44%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:44%;background:var(--red)"></div></div>
-              </div>
-              <div>
-                <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟡 Anglais A2</span><span style="font-size:12px;color:var(--text3);font-weight:700;">83%</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:83%;background:var(--yellow)"></div></div>
-              </div>
-            </div>
+            <div id="progression-bars" style="display:flex;flex-direction:column;gap:1rem;"><div class="empty-state"><div class="ei">📊</div><p>Connecte-toi pour voir ta progression</p></div></div>
           </div>
           <div>
             <div class="card mb-2">
@@ -705,17 +672,14 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
                 <h3>Tâches du jour</h3>
                 <span class="tag tag-red">3 restantes</span>
               </div>
-              <div class="task-item"><span>📖 Réviser Séries entières (Analyse II)</span><span class="task-dur">45 min</span></div>
-              <div class="task-item"><span>✏️ Exercices Électro Ch.4</span><span class="task-dur">30 min</span></div>
-              <div class="task-item"><span>🧪 Lire fiche Chimie — Liaisons</span><span class="task-dur">20 min</span></div>
-              <div class="task-item task-done"><span>✅ Algo — TP Tri rapide</span><span class="task-dur">Fait</span></div>
+              <div id="tasks-list"><div class="empty-state"><div class="ei">✅</div><p>Aucune tâche pour aujourd'hui</p></div></div>
             </div>
             <div class="conseil-card">
               <div class="flex gap-2 items-center">
                 <div style="font-size:2rem;">💡</div>
                 <div>
                   <div style="font-size:13px;font-weight:800;color:var(--blue);">Conseil du jour</div>
-                  <div style="font-size:13px;color:var(--text2);margin-top:3px;">La Chimie est ta matière la plus fragile (44%). Consacre 20 min supplémentaires ce soir.</div>
+                  <div id="conseil-text" style="font-size:13px;color:var(--text2);margin-top:3px;">Soumets tes cours du jour pour recevoir un conseil personnalisé.</div>
                 </div>
               </div>
               <button class="btn btn-blue btn-sm" style="margin-top:.8rem;width:100%;" onclick="showSection('daily')">Soumettre les cours du jour →</button>
@@ -1083,7 +1047,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
             <div class="chat-messages" id="chat-messages">
               <div class="msg ai">
                 <div class="msg-av">🤖</div>
-                <div class="msg-bubble">Bonjour Jean-Paul ! 👋 Je suis ton assistant KSA. Je connais tout ton programme Ingé1 de Kingsley : Algorithmique, Électromagnétisme, Analyse II, Géométrie, IDFOT, Atelier d'écriture, Réflexion humaine, Chimie et Anglais A2.<br><br>Pose-moi n'importe quelle question sur tes cours ! 😊</div>
+                <div class="msg-bubble" id="chat-welcome-msg">Bonjour ! 👋 Je suis ton assistant KSA. Je connais tout ton programme Ingé1 de Kingsley : Algorithmique, Électromagnétisme, Analyse II, Géométrie, IDFOT, Atelier d'écriture, Réflexion humaine, Chimie et Anglais A2.<br><br>Pose-moi n'importe quelle question sur tes cours ! 😊</div>
               </div>
             </div>
             <div class="typing-indicator" id="typing">
@@ -1112,16 +1076,16 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
             <div class="card mb-2">
               <h3>Mon profil</h3>
               <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;">
-                <div class="avatar avatar-blue avatar-lg">JP</div>
+                <div class="avatar avatar-blue avatar-lg" id="profil-avatar">?</div>
                 <div>
-                  <div style="font-weight:800;font-size:15px;">Jean-Paul Mbarga</div>
-                  <div style="font-size:12px;color:var(--text3);">[jp.mbarga@kingsley.edu](mailto:jp.mbarga@kingsley.edu)</div>
-                  <div style="font-size:12px;color:var(--text3);">KS2025-0042 · Ingé1</div>
+                  <div style="font-weight:800;font-size:15px;" id="profil-nom">—</div>
+                  <div style="font-size:12px;color:var(--text3);" id="profil-email">—</div>
+                  <div style="font-size:12px;color:var(--text3);">Ingé1 — Kingsley School</div>
                 </div>
               </div>
-              <div class="form-group"><label>Prénom</label><input type="text" value="Jean-Paul"></div>
-              <div class="form-group"><label>Nom</label><input type="text" value="Mbarga"></div>
-              <div class="form-group"><label>Email</label><input type="email" value="[jp.mbarga@kingsley.edu](mailto:jp.mbarga@kingsley.edu)"></div>
+              <div class="form-group"><label>Prénom</label><input type="text" id="profil-input-prenom"></div>
+              <div class="form-group"><label>Nom</label><input type="text" id="profil-input-nom"></div>
+              <div class="form-group"><label>Email</label><input type="email" id="profil-input-email"></div>
               <button class="btn btn-blue btn-sm" onclick="toast('Profil mis à jour !')">Sauvegarder</button>
             </div>
             <div class="card">
@@ -1236,56 +1200,34 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
         <div class="grid-4 mb-2x">
           <div class="admin-stat">
             <div class="stat-label">Étudiants inscrits</div>
-            <div class="stat-val" style="color:var(--blue);">47</div>
-            <div class="stat-sub">↑ +3 ce mois</div>
+            <div class="stat-val" id="admin-stat-users" style="color:var(--blue);">—</div>
+            <div class="stat-sub" id="admin-stat-users-sub">chargement...</div>
           </div>
           <div class="admin-stat">
             <div class="stat-label">Fiches générées</div>
-            <div class="stat-val" style="color:var(--green);">312</div>
+            <div class="stat-val" id="admin-stat-fiches" style="color:var(--green);">—</div>
             <div class="stat-sub">ce semestre</div>
           </div>
           <div class="admin-stat">
             <div class="stat-label">Exercices traités</div>
-            <div class="stat-val" style="color:var(--purple);">1,840</div>
-            <div class="stat-sub">succès moy. 71%</div>
+            <div class="stat-val" id="admin-stat-exercices" style="color:var(--purple);">—</div>
+            <div class="stat-sub" id="admin-stat-ex-sub">chargement...</div>
           </div>
           <div class="admin-stat">
             <div class="stat-label">Connexions aujourd'hui</div>
-            <div class="stat-val" style="color:var(--orange);">23</div>
-            <div class="stat-sub">sur 47 étudiants</div>
+            <div class="stat-val" id="admin-stat-connexions" style="color:var(--orange);">—</div>
+            <div class="stat-sub" id="admin-stat-co-sub">chargement...</div>
           </div>
         </div>
         <div class="grid-2">
           <div class="card">
             <h3>Activité récente</h3>
-            <div style="display:flex;flex-direction:column;gap:.6rem;">
-              <div style="display:flex;gap:.8rem;align-items:center;font-size:13px;">
-                <div style="width:34px;height:34px;border-radius:50%;background:var(--blue-l);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">AM</div>
-                <div><div style="font-weight:600;">Alice M. a soumis 3 cours</div><div style="font-size:12px;color:var(--text3);">Il y a 12 min</div></div>
-              </div>
-              <div style="display:flex;gap:.8rem;align-items:center;font-size:13px;">
-                <div style="width:34px;height:34px;border-radius:50%;background:var(--green-l);color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">BO</div>
-                <div><div style="font-weight:600;">Blaise O. a traité 15 exercices</div><div style="font-size:12px;color:var(--text3);">Il y a 28 min</div></div>
-              </div>
-              <div style="display:flex;gap:.8rem;align-items:center;font-size:13px;">
-                <div style="width:34px;height:34px;border-radius:50%;background:var(--pink-l);color:var(--pink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">CN</div>
-                <div><div style="font-weight:600;">Carine N. — compte créé</div><div style="font-size:12px;color:var(--text3);">Il y a 1 h</div></div>
-              </div>
-              <div style="display:flex;gap:.8rem;align-items:center;font-size:13px;">
-                <div style="width:34px;height:34px;border-radius:50%;background:var(--orange-l);color:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">JP</div>
-                <div><div style="font-weight:600;">Jean-Paul M. — 7 jours consécutifs</div><div style="font-size:12px;color:var(--text3);">Il y a 2 h</div></div>
-              </div>
-            </div>
+            <div id="admin-activity-list" style="display:flex;flex-direction:column;gap:.6rem;"><div class="empty-state"><div class="ei">🕐</div><p>Chargement de l'activité...</p></div></div>
           </div>
           <div class="card">
             <h3>Matières les plus difficiles</h3>
             <p style="font-size:12px;color:var(--text3);margin-bottom:1rem;">Basé sur les taux de réussite aux exercices</p>
-            <div style="display:flex;flex-direction:column;gap:.8rem;">
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟡 Chimie</span><span style="font-size:12px;color:var(--red);font-weight:700;">52%</span></div><div class="progress-bar"><div class="progress-fill" style="width:52%;background:var(--red)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟣 Électromagnétisme</span><span style="font-size:12px;color:var(--orange);font-weight:700;">61%</span></div><div class="progress-bar"><div class="progress-fill" style="width:61%;background:var(--orange)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟠 Géométrie</span><span style="font-size:12px;color:var(--yellow);font-weight:700;">67%</span></div><div class="progress-bar"><div class="progress-fill" style="width:67%;background:var(--yellow)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🔵 Algorithmique</span><span style="font-size:12px;color:var(--green);font-weight:700;">79%</span></div><div class="progress-bar"><div class="progress-fill" style="width:79%;background:var(--green)"></div></div></div>
-            </div>
+            <div id="admin-matieres-difficulty" style="display:flex;flex-direction:column;gap:.8rem;"><div class="empty-state"><div class="ei">📊</div><p>Chargement des statistiques...</p></div></div>
           </div>
         </div>
       </div>
@@ -1293,7 +1235,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
       <div id="admin-section-admin-users" class="admin-section">
         <div class="page-header">
           <div class="section-row" style="margin-bottom:0;">
-            <div><h2>Comptes étudiants 👤</h2><p>Gérer les 47 étudiants inscrits</p></div>
+            <div><h2>Comptes étudiants 👤</h2><p id="admin-users-count">Chargement...</p></div>
             <button class="btn btn-blue btn-sm" onclick="toast('Invitation envoyée !')">+ Inviter un étudiant</button>
           </div>
         </div>
@@ -1317,48 +1259,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><div style="font-weight:700;">Jean-Paul Mbarga</div><div style="font-size:11px;color:var(--text3);">[jp.mbarga@kingsley.edu](mailto:jp.mbarga@kingsley.edu)</div></td>
-                <td>KS2025-0042</td>
-                <td><span class="status-dot status-active"></span>Actif</td>
-                <td>14</td>
-                <td>Aujourd'hui, 14h22</td>
-                <td><button class="btn btn-outline btn-sm" onclick="toast('Profil ouvert')">Voir</button></td>
-              </tr>
-              <tr>
-                <td><div style="font-weight:700;">Alice Mboukou</div><div style="font-size:11px;color:var(--text3);">[a.mboukou@kingsley.edu](mailto:a.mboukou@kingsley.edu)</div></td>
-                <td>KS2025-0031</td>
-                <td><span class="status-dot status-active"></span>Actif</td>
-                <td>21</td>
-                <td>Aujourd'hui, 13h55</td>
-                <td><button class="btn btn-outline btn-sm" onclick="toast('Profil ouvert')">Voir</button></td>
-              </tr>
-              <tr>
-                <td><div style="font-weight:700;">Blaise Ongolo</div><div style="font-size:11px;color:var(--text3);">[b.ongolo@kingsley.edu](mailto:b.ongolo@kingsley.edu)</div></td>
-                <td>KS2025-0018</td>
-                <td><span class="status-dot status-active"></span>Actif</td>
-                <td>9</td>
-                <td>Aujourd'hui, 12h10</td>
-                <td><button class="btn btn-outline btn-sm" onclick="toast('Profil ouvert')">Voir</button></td>
-              </tr>
-              <tr>
-                <td><div style="font-weight:700;">Carine Nguema</div><div style="font-size:11px;color:var(--text3);">[c.nguema@kingsley.edu](mailto:c.nguema@kingsley.edu)</div></td>
-                <td>KS2025-0047</td>
-                <td><span class="status-dot status-active"></span>Actif</td>
-                <td>0</td>
-                <td>Aujourd'hui, 11h40</td>
-                <td><button class="btn btn-outline btn-sm" onclick="toast('Profil ouvert')">Voir</button></td>
-              </tr>
-              <tr>
-                <td><div style="font-weight:700;">Daniel Essomba</div><div style="font-size:11px;color:var(--text3);">[d.essomba@kingsley.edu](mailto:d.essomba@kingsley.edu)</div></td>
-                <td>KS2025-0005</td>
-                <td><span class="status-dot status-inactive"></span>Inactif</td>
-                <td>6</td>
-                <td>23 Avr. 2026</td>
-                <td><button class="btn btn-outline btn-sm" onclick="toast('Profil ouvert')">Voir</button></td>
-              </tr>
-            </tbody>
+            <tbody id="admin-users-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">Chargement...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -1374,42 +1275,42 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
             <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 3 · 4h/semaine</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
             <div style="font-size:12px;color:var(--text2);">M. Nkodo Pierre</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="toast('Matière modifiée')">Modifier</button>
+            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
           </div>
           <div class="card" style="border-top:4px solid var(--purple);">
             <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Électromagnétisme</h3><span class="tag tag-purple">Actif</span></div>
             <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 4 · 3h/semaine</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
             <div style="font-size:12px;color:var(--text2);">Mme Atangana Sophie</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="toast('Matière modifiée')">Modifier</button>
+            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
           </div>
           <div class="card" style="border-top:4px solid var(--green);">
             <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Analyse II</h3><span class="tag tag-green">Actif</span></div>
             <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 4 · 4h/semaine</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
             <div style="font-size:12px;color:var(--text2);">M. Fouda Jean-Baptiste</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="toast('Matière modifiée')">Modifier</button>
+            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
           </div>
           <div class="card" style="border-top:4px solid var(--orange);">
             <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Géométrie</h3><span class="tag tag-orange">Actif</span></div>
             <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 3 · 3h/semaine</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
             <div style="font-size:12px;color:var(--text2);">M. Fouda Jean-Baptiste</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="toast('Matière modifiée')">Modifier</button>
+            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
           </div>
           <div class="card" style="border-top:4px solid var(--teal);">
             <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">IDFOT</h3><span class="tag" style="background:var(--teal-l);color:var(--teal);">Actif</span></div>
             <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 2 · 2h/semaine</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
             <div style="font-size:12px;color:var(--text2);">M. Bebey Thomas</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="toast('Matière modifiée')">Modifier</button>
+            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
           </div>
           <div class="card" style="border-top:4px solid var(--red);">
             <div class="flex justify-between items-center mb-2"><h3 style="margin:0;">Chimie</h3><span class="tag tag-red">Actif</span></div>
             <div style="font-size:12px;color:var(--text3);margin-bottom:.8rem;">Coefficient : 3 · 3h/semaine</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:.3rem;">Enseignant</div>
             <div style="font-size:12px;color:var(--text2);">Mme Owona Claire</div>
-            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="toast('Matière modifiée')">Modifier</button>
+            <button class="btn btn-outline btn-sm w-full" style="margin-top:1rem;" onclick="editMatiere(this)">✏️ Modifier</button>
           </div>
         </div>
       </div>
@@ -1422,21 +1323,15 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
         <div class="grid-2">
           <div class="card">
             <h3>Progression moyenne par matière</h3>
-            <div style="display:flex;flex-direction:column;gap:.9rem;margin-top:.5rem;">
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟢 Analyse II</span><span style="font-size:12px;color:var(--green);font-weight:700;">81%</span></div><div class="progress-bar"><div class="progress-fill" style="width:81%;background:var(--green)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟡 Anglais A2</span><span style="font-size:12px;color:var(--yellow);font-weight:700;">79%</span></div><div class="progress-bar"><div class="progress-fill" style="width:79%;background:var(--yellow)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🔵 Algorithmique</span><span style="font-size:12px;color:var(--blue);font-weight:700;">75%</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--blue)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟣 Électromagnétisme</span><span style="font-size:12px;color:var(--purple);font-weight:700;">61%</span></div><div class="progress-bar"><div class="progress-fill" style="width:61%;background:var(--purple)"></div></div></div>
-              <div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">🟡 Chimie</span><span style="font-size:12px;color:var(--red);font-weight:700;">52%</span></div><div class="progress-bar"><div class="progress-fill" style="width:52%;background:var(--red)"></div></div></div>
-            </div>
+            <div id="admin-stats-progression" style="display:flex;flex-direction:column;gap:.9rem;margin-top:.5rem;"><div class="empty-state"><div class="ei">📊</div><p>Chargement...</p></div></div>
           </div>
           <div class="card">
             <h3>Résumé d'utilisation</h3>
             <div class="grid-2" style="gap:.8rem;margin-top:.5rem;">
-              <div class="stat-card" style="background:var(--blue-l);border-color:var(--blue-m);"><div class="stat-label">Connexions/jour</div><div class="stat-val" style="color:var(--blue);">23</div></div>
-              <div class="stat-card" style="background:var(--green-l);border-color:var(--green-m);"><div class="stat-label">Fiches/semaine</div><div class="stat-val" style="color:var(--green);">58</div></div>
-              <div class="stat-card" style="background:var(--purple-l);border-color:var(--purple-m);"><div class="stat-label">Exercices/jour</div><div class="stat-val" style="color:var(--purple);">142</div></div>
-              <div class="stat-card" style="background:var(--orange-l);border-color:var(--orange-m);"><div class="stat-label">Taux rétention</div><div class="stat-val" style="color:var(--orange);">89%</div></div>
+              <div class="stat-card" style="background:var(--blue-l);border-color:var(--blue-m);"><div class="stat-label">Connexions/jour</div><div class="stat-val" id="admin-co-jour" style="color:var(--blue);">—</div></div>
+              <div class="stat-card" style="background:var(--green-l);border-color:var(--green-m);"><div class="stat-label">Fiches/semaine</div><div class="stat-val" id="admin-fiches-sem" style="color:var(--green);">—</div></div>
+              <div class="stat-card" style="background:var(--purple-l);border-color:var(--purple-m);"><div class="stat-label">Exercices/jour</div><div class="stat-val" id="admin-ex-jour" style="color:var(--purple);">—</div></div>
+              <div class="stat-card" style="background:var(--orange-l);border-color:var(--orange-m);"><div class="stat-label">Étudiants actifs</div><div class="stat-val" id="admin-actifs" style="color:var(--orange);">—</div></div>
             </div>
           </div>
         </div>
@@ -1481,19 +1376,48 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
   </div>
 </div>
 <script>
-// ===== CONFIGURATION API =====
-// En développement local : 'https://ksa-backend.vercel.app/api'
-// En production sur Render : l'URL de ton backend Render
+// ===== CONFIG =====
 const API_URL = 'https://ksa-backend.vercel.app/api';
 let authToken = localStorage.getItem('ksa_token') || null;
 let currentUser = JSON.parse(localStorage.getItem('ksa_user') || 'null');
-// Headers authentifiés
+
+// ===== HISTORY API - bouton retour navigateur =====
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  window.scrollTo(0, 0);
+  history.pushState({ page: p }, '', '#' + p);
+}
+
+window.addEventListener('popstate', function(e) {
+  const page = e.state?.page || 'landing';
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+});
+
+// Init history state
+window.addEventListener('load', function() {
+  history.replaceState({ page: 'landing' }, '', '#landing');
+  // Auto-reconnect si token valide
+  if (authToken && currentUser) {
+    applyUserPreferences();
+    updateUserUI();
+  }
+});
+
+// ===== SCROLL to landing sections =====
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== API HELPER =====
 function apiHeaders(isJson = true) {
   const h = { 'Authorization': `Bearer ${authToken}` };
   if (isJson) h['Content-Type'] = 'application/json';
   return h;
 }
-// Requête API générique
 async function api(method, endpoint, body = null, isFormData = false) {
   const opts = { method, headers: apiHeaders(!isFormData) };
   if (body) opts.body = isFormData ? body : JSON.stringify(body);
@@ -1502,12 +1426,8 @@ async function api(method, endpoint, body = null, isFormData = false) {
   if (!res.ok) throw new Error(data.error || 'Erreur serveur');
   return data;
 }
-const selectedSubjects = [];
-function showPage(p) {
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.getElementById('page-' + p).classList.add('active');
-  window.scrollTo(0, 0);
-}
+
+// ===== AUTH =====
 async function loginUser() {
   const emailEl = document.getElementById('login-email');
   const passEl = document.getElementById('login-pass');
@@ -1521,92 +1441,343 @@ async function loginUser() {
     localStorage.setItem('ksa_token', authToken);
     localStorage.setItem('ksa_user', JSON.stringify(currentUser));
     applyUserPreferences();
-    showPage(currentUser.role === 'admin' ? 'admin' : 'app');
-    if (currentUser.role === 'admin') showAdminSection('admin-overview');
-    else { showSection('dashboard'); loadDashboard(); }
+    updateUserUI();
+    if (currentUser.role === 'admin') {
+      showPage('admin');
+      showAdminSection('admin-overview');
+      loadAdminData();
+    } else {
+      showPage('app');
+      showSection('dashboard');
+      loadDashboard();
+    }
     toast('Bienvenue ' + currentUser.prenom + ' ! 👋');
   } catch (err) { toast('❌ ' + err.message); }
 }
+
 async function registerUser() {
-  const inputs = document.querySelectorAll('#page-register input');
-  if (!inputs.length) return;
-  const prenom = inputs[0]?.value?.trim();
-  const nom = inputs[1]?.value?.trim();
-  const email = inputs[2]?.value?.trim();
-  const numero = inputs[3]?.value?.trim();
-  const pass = inputs[4]?.value;
+  const prenom = document.getElementById('reg-prenom')?.value?.trim();
+  const nom = document.getElementById('reg-nom')?.value?.trim();
+  const email = document.getElementById('reg-email')?.value?.trim();
+  const pass = document.getElementById('reg-pass')?.value;
   if (!prenom || !nom || !email || !pass) { toast('Remplis tous les champs !'); return; }
   try {
-    const data = await api('POST', '/auth/register', { prenom, nom, email, numero_etudiant: numero, password: pass });
+    const data = await api('POST', '/auth/register', { prenom, nom, email, password: pass });
     authToken = data.token; currentUser = data.user;
     localStorage.setItem('ksa_token', authToken);
     localStorage.setItem('ksa_user', JSON.stringify(currentUser));
+    applyUserPreferences();
+    updateUserUI();
     showPage('app'); showSection('dashboard'); loadDashboard();
     toast('Compte créé ! Bienvenue ' + prenom + ' 🎓');
   } catch (err) { toast('❌ ' + err.message); }
 }
-async function loginAdmin() {
+
+// ===== ADMIN LOGIN MODAL =====
+function showAdminLoginModal() {
+  // If already have credentials in login form, use them
   const emailEl = document.getElementById('login-email');
   const passEl = document.getElementById('login-pass');
-  if (emailEl && passEl && emailEl.value) { await loginUser(); return; }
-  showPage('admin'); showAdminSection('admin-overview');
-}
-function applyUserPreferences() {
-  if (currentUser?.couleur_accent) {
-    [document.documentElement.style](http://document.documentElement.style).setProperty('--blue', currentUser.couleur_accent);
+  if (emailEl?.value && passEl?.value) { loginUser(); return; }
+  // Show modal
+  let modal = document.getElementById('admin-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'admin-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+      <div style="background:white;border-radius:var(--radius-xl);padding:2.5rem;width:100%;max-width:400px;box-shadow:var(--shadow-lg);">
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;margin-bottom:1.5rem;text-align:center;">🔐 Connexion Administrateur</div>
+        <div class="form-group"><label>Email admin</label><input type="email" id="adm-email" placeholder="admin@kingsley.edu"></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="adm-pass" placeholder="••••••••"></div>
+        <div style="display:flex;gap:.8rem;margin-top:1rem;">
+          <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('admin-modal').remove()">Annuler</button>
+          <button class="btn btn-blue" style="flex:1;" onclick="loginAsAdmin()">Se connecter</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
   }
+  document.getElementById('admin-modal').style.display = 'flex';
 }
-async function loadDashboard() {
-  if (!authToken) return;
+
+async function loginAsAdmin() {
+  const email = document.getElementById('adm-email')?.value?.trim();
+  const pass = document.getElementById('adm-pass')?.value;
+  if (!email || !pass) { toast('Email et mot de passe requis'); return; }
   try {
-    const data = await api('GET', '/progression/dashboard');
-    const statCards = document.querySelectorAll('.stat-val');
-    if (statCards[0]) statCards[0].textContent = data.fiches_count || '—';
-    if (statCards[1]) statCards[1].textContent = data.exercices_count || '—';
-    if (statCards[2]) statCards[2].textContent = (data.streak_jours || 0) + ' 🔥';
-  } catch (e) {}
+    const data = await api('POST', '/auth/login-admin', { email, password: pass });
+    authToken = data.token; currentUser = data.user;
+    localStorage.setItem('ksa_token', authToken);
+    localStorage.setItem('ksa_user', JSON.stringify(currentUser));
+    document.getElementById('admin-modal')?.remove();
+    showPage('admin'); showAdminSection('admin-overview'); loadAdminData();
+    toast('Bienvenue Administrateur 👑');
+  } catch (err) { toast('❌ ' + err.message); }
 }
+
 function deconnexion() {
   authToken = null; currentUser = null;
   localStorage.removeItem('ksa_token'); localStorage.removeItem('ksa_user');
   showPage('landing'); toast('Déconnecté 👋');
 }
+
+// ===== USER UI =====
+function updateUserUI() {
+  if (!currentUser) return;
+  const initiales = (currentUser.prenom?.[0] || '') + (currentUser.nom?.[0] || '');
+  const nom = currentUser.prenom + ' ' + (currentUser.nom?.[0] || '') + '.';
+  const el = (id) => document.getElementById(id);
+  if (el('sidebar-avatar')) el('sidebar-avatar').textContent = initiales;
+  if (el('sidebar-name')) el('sidebar-name').textContent = nom;
+  if (el('profil-avatar')) el('profil-avatar').textContent = initiales;
+  if (el('profil-nom')) el('profil-nom').textContent = currentUser.prenom + ' ' + (currentUser.nom || '');
+  if (el('profil-email')) el('profil-email').textContent = currentUser.email;
+  if (el('profil-input-prenom')) el('profil-input-prenom').value = currentUser.prenom || '';
+  if (el('profil-input-nom')) el('profil-input-nom').value = currentUser.nom || '';
+  if (el('profil-input-email')) el('profil-input-email').value = currentUser.email || '';
+  // Greeting
+  const greeting = el('dash-greeting');
+  if (greeting) greeting.textContent = 'Bonjour, ' + currentUser.prenom + ' 👋';
+  // Date
+  const dateEl = el('dash-date');
+  if (dateEl) {
+    const now = new Date();
+    const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    dateEl.textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  }
+  // Chat welcome
+  const chatWelcome = el('chat-welcome-msg');
+  if (chatWelcome) {
+    chatWelcome.innerHTML = 'Bonjour ' + currentUser.prenom + ' ! 👋 Je suis ton assistant KSA. Je connais tout ton programme Ingé1 de Kingsley : Algorithmique, Électromagnétisme, Analyse II, Géométrie, IDFOT, Atelier d'écriture, Réflexion humaine, Chimie et Anglais A2.<br><br>Pose-moi n'importe quelle question sur tes cours ! 😊';
+  }
+  // Chat avatar
+  document.querySelectorAll('.msg.user .msg-av').forEach(av => { av.textContent = initiales; });
+}
+
+function applyUserPreferences() {
+  if (currentUser?.couleur_accent) {
+    document.documentElement.style.setProperty('--blue', currentUser.couleur_accent);
+  }
+}
+
+// ===== DASHBOARD DATA =====
+async function loadDashboard() {
+  updateUserUI();
+  if (!authToken) return;
+  try {
+    const data = await api('GET', '/progression/dashboard');
+    const el = (id) => document.getElementById(id);
+    if (el('stat-fiches')) el('stat-fiches').textContent = data.fiches_count ?? 0;
+    if (el('stat-exercices')) el('stat-exercices').textContent = data.exercices_count ?? 0;
+    if (el('stat-exercices-sub')) {
+      const pct = data.exercices_count > 0 ? Math.round((data.exercices_reussis / data.exercices_count) * 100) : 0;
+      el('stat-exercices-sub').textContent = 'succès ' + pct + '%';
+    }
+    if (el('stat-streak')) el('stat-streak').textContent = data.streak_jours ?? 0;
+    // Progression bars
+    if (data.progression && el('progression-bars')) {
+      const colors = {
+        'Algorithmique': 'var(--blue)', 'Électromagnétisme': 'var(--purple)',
+        'Analyse II': 'var(--green)', 'Géométrie': 'var(--orange)',
+        'IDFOT': 'var(--teal)', "Atelier d'écriture": 'var(--pink)',
+        'Réflexion humaine': 'var(--red)', 'Chimie': 'var(--yellow)', 'Anglais A2': '#06b6d4'
+      };
+      const emojis = {
+        'Algorithmique':'🔵','Électromagnétisme':'🟣','Analyse II':'🟢',
+        'Géométrie':'🟠','IDFOT':'🩵',"Atelier d'écriture":'🩷',
+        'Réflexion humaine':'🔴','Chimie':'🟡','Anglais A2':'🌐'
+      };
+      if (data.progression.length > 0) {
+        el('progression-bars').innerHTML = data.progression.map(p => {
+          const pct = p.score ?? 0;
+          const color = colors[p.matiere] || 'var(--blue)';
+          const emoji = emojis[p.matiere] || '📚';
+          return `<div>
+            <div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">${emoji} ${p.matiere}</span><span style="font-size:12px;color:var(--text3);font-weight:700;">${pct}%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+          </div>`;
+        }).join('');
+      } else {
+        el('progression-bars').innerHTML = '<div class="empty-state"><div class="ei">📊</div><p>Soumets tes premiers cours pour voir ta progression</p></div>';
+      }
+    }
+    // Programme du jour
+    if (data.programme_jour && el('tasks-list') && data.programme_jour.length > 0) {
+      el('tasks-list').innerHTML = data.programme_jour.map(t => `
+        <div class="task-item"><span>📖 ${t.matiere} — ${t.type_activite || 'Révision'}</span><span class="task-dur">${t.duree_minutes || 30} min</span></div>
+      `).join('');
+    }
+    // Prochaine révision
+    if (data.prochaine_revision && el('stat-revision')) {
+      el('stat-revision').textContent = 'Auj.';
+      if (el('stat-revision-sub')) el('stat-revision-sub').textContent = data.prochaine_revision;
+    }
+    // Conseil
+    if (data.matiere_faible && el('conseil-text')) {
+      el('conseil-text').textContent = data.matiere_faible + ' est ta matière la plus fragile. Consacre 20 min supplémentaires ce soir !';
+    }
+  } catch (e) {
+    console.log('Dashboard load error:', e);
+    // Affiche quand même les valeurs à 0 si erreur
+    ['stat-fiches','stat-exercices','stat-streak'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '0';
+    });
+  }
+}
+
+// ===== ADMIN DATA =====
+async function loadAdminData() {
+  if (!authToken) return;
+  try {
+    const data = await api('GET', '/admin/stats');
+    const el = (id) => document.getElementById(id);
+    if (el('admin-stat-users')) el('admin-stat-users').textContent = data.total_users ?? 0;
+    if (el('admin-stat-users-sub')) el('admin-stat-users-sub').textContent = '↑ ' + (data.new_this_month ?? 0) + ' ce mois';
+    if (el('admin-stat-fiches')) el('admin-stat-fiches').textContent = data.total_fiches ?? 0;
+    if (el('admin-stat-exercices')) el('admin-stat-exercices').textContent = data.total_exercices ?? 0;
+    if (el('admin-stat-ex-sub')) el('admin-stat-ex-sub').textContent = 'succès moy. ' + (data.taux_reussite ?? 0) + '%';
+    if (el('admin-stat-connexions')) el('admin-stat-connexions').textContent = data.connexions_today ?? 0;
+    if (el('admin-stat-co-sub')) el('admin-stat-co-sub').textContent = 'sur ' + (data.total_users ?? 0) + ' étudiants';
+    if (el('admin-co-jour')) el('admin-co-jour').textContent = data.connexions_today ?? 0;
+    if (el('admin-actifs')) el('admin-actifs').textContent = data.actifs ?? 0;
+    // Activité récente
+    if (data.activite_recente && el('admin-activity-list')) {
+      if (data.activite_recente.length > 0) {
+        const colors = ['var(--blue-l)','var(--green-l)','var(--pink-l)','var(--orange-l)'];
+        const textColors = ['var(--blue)','var(--green)','var(--pink)','var(--orange)'];
+        el('admin-activity-list').innerHTML = data.activite_recente.map((a, i) => {
+          const initiales = (a.prenom?.[0] || '') + (a.nom?.[0] || '');
+          const c = colors[i % colors.length], tc = textColors[i % textColors.length];
+          return `<div style="display:flex;gap:.8rem;align-items:center;font-size:13px;">
+            <div style="width:34px;height:34px;border-radius:50%;background:${c};color:${tc};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">${initiales}</div>
+            <div><div style="font-weight:600;">${a.prenom} ${a.nom} — ${a.action}</div><div style="font-size:12px;color:var(--text3);">${a.temps}</div></div>
+          </div>`;
+        }).join('');
+      } else {
+        el('admin-activity-list').innerHTML = '<div class="empty-state"><div class="ei">🕐</div><p>Aucune activité récente</p></div>';
+      }
+    }
+    // Progression stats
+    if (data.progression_matieres && el('admin-stats-progression')) {
+      const matColors = {'Algorithmique':'var(--blue)','Électromagnétisme':'var(--purple)','Analyse II':'var(--green)','Géométrie':'var(--orange)','Chimie':'var(--red)','Anglais A2':'var(--yellow)'};
+      const matEmoji = {'Algorithmique':'🔵','Électromagnétisme':'🟣','Analyse II':'🟢','Géométrie':'🟠','Chimie':'🟡','Anglais A2':'🌐','IDFOT':'🩵',"Atelier d'écriture":'🩷','Réflexion humaine':'🔴'};
+      el('admin-stats-progression').innerHTML = data.progression_matieres.map(m => {
+        const color = matColors[m.matiere] || 'var(--blue)';
+        const emoji = matEmoji[m.matiere] || '📚';
+        return `<div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">${emoji} ${m.matiere}</span><span style="font-size:12px;color:${color};font-weight:700;">${m.score}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${m.score}%;background:${color}"></div></div></div>`;
+      }).join('');
+    }
+    // Admin matieres difficulty
+    if (data.matieres_difficiles && el('admin-matieres-difficulty')) {
+      if (data.matieres_difficiles.length > 0) {
+        const diffColors = ['var(--red)','var(--orange)','var(--yellow)','var(--green)'];
+        el('admin-matieres-difficulty').innerHTML = data.matieres_difficiles.map((m, i) => {
+          const color = diffColors[Math.min(i, diffColors.length-1)];
+          return `<div><div class="flex justify-between mb-1"><span style="font-size:13px;font-weight:600;">${m.matiere}</span><span style="font-size:12px;color:${color};font-weight:700;">${m.taux}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${m.taux}%;background:${color}"></div></div></div>`;
+        }).join('');
+      } else {
+        el('admin-matieres-difficulty').innerHTML = '<div class="empty-state"><div class="ei">📊</div><p>Pas encore de données</p></div>';
+      }
+    }
+  } catch(e) { console.log('Admin data error:', e); }
+
+  // Load users list
+  try {
+    const users = await api('GET', '/admin/users');
+    const tbody = document.getElementById('admin-users-tbody');
+    const countEl = document.getElementById('admin-users-count');
+    if (countEl) countEl.textContent = 'Gérer les ' + users.length + ' étudiants inscrits';
+    if (tbody) {
+      if (users.length > 0) {
+        tbody.innerHTML = users.map(u => {
+          const lastCo = u.derniere_connexion ? new Date(u.derniere_connexion).toLocaleDateString('fr-FR') : 'Jamais';
+          const statusClass = u.derniere_connexion && (Date.now() - new Date(u.derniere_connexion) < 86400000*7) ? 'status-active' : 'status-inactive';
+          const statusText = statusClass === 'status-active' ? 'Actif' : 'Inactif';
+          return `<tr>
+            <td><div style="font-weight:700;">${u.prenom} ${u.nom}</div><div style="font-size:11px;color:var(--text3);">${u.email}</div></td>
+            <td>${u.role === 'admin' ? '👑 Admin' : 'Étudiant'}</td>
+            <td><span class="status-dot ${statusClass}"></span>${statusText}</td>
+            <td>${u.fiches_count ?? 0}</td>
+            <td>${lastCo}</td>
+            <td><button class="btn btn-outline btn-sm" onclick="toast('Profil: ${u.prenom} ${u.nom}')">Voir</button></td>
+          </tr>`;
+        }).join('');
+      } else {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">Aucun étudiant inscrit</td></tr>';
+      }
+    }
+  } catch(e) { console.log('Users load error:', e); }
+}
+
+// ===== ADMIN - Matières modifiables =====
+function editMatiere(btn) {
+  const card = btn.closest('.card');
+  const h3 = card.querySelector('h3');
+  const nomMatiere = h3.textContent;
+  const infoDiv = card.querySelector('[style*="font-size:12px;color:var(--text2)"]');
+  const currentTeacher = infoDiv?.textContent || '';
+  const coefDiv = card.querySelector('[style*="color:var(--text3)"]');
+  const currentCoef = coefDiv?.textContent || '';
+
+  // Toggle edit mode
+  if (btn.textContent.includes('Modifier')) {
+    btn.textContent = '💾 Sauvegarder';
+    btn.classList.remove('btn-outline'); btn.classList.add('btn-blue');
+    if (infoDiv) infoDiv.innerHTML = `<input type="text" id="edit-teacher-${nomMatiere}" value="${currentTeacher}" style="width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:13px;font-family:var(--font-body);">`;
+  } else {
+    btn.textContent = '✏️ Modifier';
+    btn.classList.add('btn-outline'); btn.classList.remove('btn-blue');
+    const input = card.querySelector('input[type=text]');
+    if (input && infoDiv) {
+      const newVal = input.value;
+      infoDiv.textContent = newVal;
+      toast('Enseignant mis à jour : ' + nomMatiere);
+      // TODO: save to backend
+    }
+  }
+}
+
+// ===== NAVIGATION =====
+const selectedSubjects = [];
+
 function showSection(s) {
   document.querySelectorAll('#page-app .section').forEach(x => x.classList.remove('active-section'));
   const sec = document.getElementById('section-' + s);
   if (sec) sec.classList.add('active-section');
   document.querySelectorAll('#page-app .nav-item').forEach(x => x.classList.remove('active'));
-  const navItems = document.querySelectorAll('#page-app .nav-item');
-  navItems.forEach(item => {
-    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(`'${s}'`))
-      item.classList.add('active');
+  document.querySelectorAll('#page-app .nav-item').forEach(item => {
+    if (item.getAttribute('onclick')?.includes(`'${s}'`)) item.classList.add('active');
   });
+  history.pushState({ page: 'app', section: s }, '', '#app/' + s);
 }
+
 function showAdminSection(s) {
   document.querySelectorAll('.admin-section').forEach(x => x.classList.remove('active-section'));
   const sec = document.getElementById('admin-section-' + s);
   if (sec) sec.classList.add('active-section');
   document.querySelectorAll('#page-admin .nav-item').forEach(x => x.classList.remove('active'));
-  const navItems = document.querySelectorAll('#page-admin .nav-item');
-  navItems.forEach(item => {
-    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(`'${s}'`))
-      item.classList.add('active');
+  document.querySelectorAll('#page-admin .nav-item').forEach(item => {
+    if (item.getAttribute('onclick')?.includes(`'${s}'`)) item.classList.add('active');
   });
+  if (s === 'admin-users' || s === 'admin-stats' || s === 'admin-overview') loadAdminData();
 }
+
+// ===== DAILY FORM =====
 function toggleSubject(cb) {
   const val = cb.value;
   if (cb.checked) { if (!selectedSubjects.includes(val)) selectedSubjects.push(val); }
   else { const i = selectedSubjects.indexOf(val); if (i > -1) selectedSubjects.splice(i, 1); }
-  // Visual feedback
   cb.closest('label').style.borderColor = cb.checked ? 'var(--blue)' : '';
   cb.closest('label').style.background = cb.checked ? 'var(--blue-l)' : '';
   cb.closest('label').style.color = cb.checked ? 'var(--blue)' : '';
 }
+
 function goStep(n) {
   if (n === 2 && selectedSubjects.length === 0) { toast('Sélectionne au moins une matière 😊'); return; }
   document.querySelectorAll('.daily-step').forEach(x => x.classList.remove('active'));
   document.getElementById('step-' + n).classList.add('active');
-  // Update pips
   for (let i = 0; i < 3; i++) {
     const pip = document.getElementById('pip-' + i);
     if (!pip) continue;
@@ -1617,6 +1788,7 @@ function goStep(n) {
   if (n === 2) buildUploadCards();
   if (n === 3) runGeneration();
 }
+
 function buildUploadCards() {
   const c = document.getElementById('upload-cards');
   const subs = selectedSubjects.length > 0 ? selectedSubjects : ['Algorithmique', 'Analyse II'];
@@ -1625,7 +1797,7 @@ function buildUploadCards() {
     'Géométrie': 'var(--orange)', 'IDFOT': 'var(--teal)', "Atelier d'écriture": 'var(--pink)',
     'Réflexion humaine': 'var(--red)', 'Chimie': 'var(--yellow)', 'Anglais A2': '#06b6d4'
   };
-  c.innerHTML = [subs.map](http://subs.map)(s => `
+  c.innerHTML = subs.map(s => `
     <div class="upload-card">
       <div class="subj-name">
         <span style="font-weight:800;color:${colors[s] || 'var(--blue)'};">${s}</span>
@@ -1638,6 +1810,7 @@ function buildUploadCards() {
       </div>
     </div>`).join('');
 }
+
 function runGeneration() {
   const fill = document.getElementById('gen-fill');
   const title = document.getElementById('gen-title');
@@ -1653,35 +1826,25 @@ function runGeneration() {
   ];
   steps.forEach(([delay, p, t, s]) => {
     setTimeout(() => {
-      [fill.style](http://fill.style).width = p;
-      title.textContent = t;
-      sub.textContent = s;
-      pct.textContent = p;
-      if (p === '100%') {
-        icon.textContent = '✅';
-        [icon.style](http://icon.style).animation = 'none';
-        setTimeout(() => showSection('fiches'), 1500);
-      }
+      fill.style.width = p; title.textContent = t; sub.textContent = s; pct.textContent = p;
+      if (p === '100%') { icon.textContent = '✅'; icon.style.animation = 'none'; setTimeout(() => showSection('fiches'), 1500); }
     }, delay);
   });
 }
+
+// ===== EXERCICES =====
 function selectChoice(qId, idx, type) {
   const choices = document.querySelectorAll(`#${qId}-choices .choice`);
-  choices.forEach((c, i) => {
-    c.classList.remove('selected', 'correct', 'wrong');
-  });
+  choices.forEach(c => c.classList.remove('selected', 'correct', 'wrong'));
   choices[idx].classList.add(type === 'correct' ? 'correct' : 'wrong');
-  // Show correct answer if wrong
   if (type === 'wrong') {
-    choices.forEach(c => {
-      if (c.getAttribute('onclick') && c.getAttribute('onclick').includes("'correct'"))
-        c.classList.add('correct');
-    });
+    choices.forEach(c => { if (c.getAttribute('onclick')?.includes("'correct'")) c.classList.add('correct'); });
   }
   const exp = document.getElementById('exp-' + qId);
   if (exp) exp.classList.add('show');
 }
-// ===== CHAT HISTORY & SYSTEM PROMPT =====
+
+// ===== CHAT =====
 const SYSTEM_PROMPT = `Tu es le KSA (Kingsley School Assistant), l'assistant académique intelligent des étudiants de première année d'ingénierie (Ingé1) à Kingsley School, Yaoundé, Cameroun.
 Tu connais parfaitement les matières du programme Ingé1 de Kingsley :
 - 🔵 Algorithmique : structures de données, algorithmes de tri, complexité, récursivité, graphes
@@ -1697,50 +1860,46 @@ Tes règles :
 1. Réponds TOUJOURS en français sauf si l'étudiant écrit en anglais
 2. Sois pédagogue, encourageant et bienveillant
 3. Donne des explications claires avec des exemples concrets
-4. Utilise des formules mathématiques quand nécessaire (notation simple)
+4. Utilise des formules mathématiques quand nécessaire
 5. Propose toujours d'aller plus loin : exercices, fiches, exemples supplémentaires
-6. Adapte ton niveau à celui d'un étudiant de 1ère année ingénierie
-7. Sois concis mais complet — évite les réponses trop longues
-8. Utilise des émojis avec modération pour rendre la conversation agréable`;
+6. Adapte ton niveau à celui d'un étudiant de 1ère année ingénierie`;
+
 let chatHistory = [];
+
 function chatKeydown(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
 }
+
 function escapeHtml(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\n/g, '<br>');
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
+
 async function sendChat() {
   const inp = document.getElementById('chat-input');
   const msg = inp.value.trim();
   if (!msg) return;
   const msgs = document.getElementById('chat-messages');
   const typing = document.getElementById('typing');
-  // Afficher message utilisateur
+  const initiales = currentUser ? (currentUser.prenom?.[0]||'') + (currentUser.nom?.[0]||'') : 'U';
   msgs.innerHTML += `
     <div class="msg user" style="animation:fadeUp .2s ease">
-      <div class="msg-av" style="background:var(--blue-l);color:var(--blue);border:2px solid var(--blue-m);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;">JP</div>
+      <div class="msg-av" style="background:var(--blue-l);color:var(--blue);border:2px solid var(--blue-m);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;">${initiales}</div>
       <div class="msg-bubble">${escapeHtml(msg)}</div>
     </div>`;
   inp.value = '';
   msgs.scrollTop = msgs.scrollHeight;
-  // Ajouter au contexte
   chatHistory.push({ role: 'user', content: msg });
-  // Afficher indicateur de frappe
   typing.classList.add('show');
   msgs.scrollTop = msgs.scrollHeight;
   try {
     const response = await fetch(API_URL + '/chat', {
-      method: 'POST',
-      headers: apiHeaders(),
-      body: JSON.stringify({ message })
+      method: 'POST', headers: apiHeaders(),
+      body: JSON.stringify({ message: msg, history: chatHistory })
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Erreur');
     const reply = data.reply || '';
+    chatHistory.push({ role: 'assistant', content: reply });
     typing.classList.remove('show');
     msgs.innerHTML += `
       <div class="msg ai" style="animation:fadeUp .2s ease">
@@ -1758,22 +1917,25 @@ async function sendChat() {
     msgs.scrollTop = msgs.scrollHeight;
   }
 }
+
+// ===== THEME =====
 function setAccent(color, light, mid) {
-  [document.documentElement.style](http://document.documentElement.style).setProperty('--blue', color);
-  [document.documentElement.style](http://document.documentElement.style).setProperty('--blue-l', light);
-  [document.documentElement.style](http://document.documentElement.style).setProperty('--blue-m', mid);
+  document.documentElement.style.setProperty('--blue', color);
+  document.documentElement.style.setProperty('--blue-l', light);
+  document.documentElement.style.setProperty('--blue-m', mid);
   document.querySelectorAll('.theme-swatch').forEach(s => s.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
   toast('Thème mis à jour ! 🎨');
 }
+
+// ===== TOAST =====
 let toastTimer;
 function toast(msg) {
   const existing = document.querySelector('.toast');
   if (existing) existing.remove();
   clearTimeout(toastTimer);
   const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
+  t.className = 'toast'; t.textContent = msg;
   document.body.appendChild(t);
   toastTimer = setTimeout(() => t.remove(), 3000);
 }
